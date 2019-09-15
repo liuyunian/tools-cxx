@@ -5,7 +5,7 @@ all: build
 	cd $(BUILD_DIR); make
 
 build:
-	mkdir $(BUILD_DIR); cd $(BUILD_DIR); cmake ..
+	mkdir $(BUILD_DIR); cd $(BUILD_DIR); cmake -D CMAKE_CXX_COMPILER=/usr/bin/g++ ..
 
 install:
 	cd $(BUILD_DIR); sudo make install

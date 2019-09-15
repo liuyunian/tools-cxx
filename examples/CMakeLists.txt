@@ -1,4 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+ADD_COMPILE_OPTIONS(-std=c++11)
+INCLUDE_DIRECTORIES(/usr/local/include)
+LINK_DIRECTORIES(/usr/local/lib)
+
 ADD_EXECUTABLE(error_test error_test.cpp)
 TARGET_LINK_LIBRARIES(error_test tools_error)
 
