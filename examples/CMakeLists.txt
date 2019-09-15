@@ -2,3 +2,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 ADD_EXECUTABLE(error_test error_test.cpp)
 TARGET_LINK_LIBRARIES(error_test tools_error)
 
+ADD_EXECUTABLE(Timestamp_test base_Timestamp_test.cpp)
+TARGET_LINK_LIBRARIES(Timestamp_test tools_base)
+
+ADD_EXECUTABLE(CurrentThread_test base_CurrentThread_test.cpp)
+TARGET_LINK_LIBRARIES(CurrentThread_test tools_base)
+
+ADD_EXECUTABLE(log_test log_test.cpp)
+TARGET_LINK_LIBRARIES(log_test tools_log tools_base)

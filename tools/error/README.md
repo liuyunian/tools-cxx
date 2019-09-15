@@ -1,5 +1,5 @@
 # 错误处理函数
-代码取自《UNIX网络编程》第一卷，对于优秀的代码要注重积累  
+<font color = red size = 4> 代码取自《UNIX网络编程》第一卷，对于优秀的代码要注重积累 </font>  
 
 |函数|strerror(errno)?|结束语句|syslog级别|
 |----|:----:|:----:|----|
@@ -9,8 +9,7 @@
 |err_msg|no|return|LOG_INFO|
 |err_quit|no|exit(1)|LOG_ERR| 
 
-
-##### Usage
+## Usage
 使用的关键在于判断什么场合使用哪个错误处理函数，依据： 
 * 是否涉及系统调用？
 * 是否需要终止程序？
