@@ -37,7 +37,7 @@ extern void log_debug(const char * file, int line, const char * fmt, ...);
 
 #define LOG_SYSERR(fmt, ...) log_syserr(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
-#define LOG_WRAN(fmt, ...) log_warn(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_WARN(fmt, ...) log_warn(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 #define LOG_INFO(fmt, ...) log_info(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
