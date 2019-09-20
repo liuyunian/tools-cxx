@@ -1,4 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(Tools_cxx_test)
 
 ADD_COMPILE_OPTIONS(-std=c++11)
 INCLUDE_DIRECTORIES(/usr/local/include)
@@ -15,3 +16,8 @@ TARGET_LINK_LIBRARIES(CurrentThread_test tools_base)
 
 ADD_EXECUTABLE(log_test log_test.cpp)
 TARGET_LINK_LIBRARIES(log_test tools_log tools_base)
+
+ADD_EXECUTABLE(timer_test timer_test.cpp)
+TARGET_LINK_LIBRARIES(timer_test tools_timer)
+
+ADD_EXECUTABLE(alarm_test alarm_test.cpp)

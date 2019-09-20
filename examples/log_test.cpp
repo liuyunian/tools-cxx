@@ -6,7 +6,7 @@ int main(){
 
     LOG_DEBUG("debug, %d", 0);
     LOG_INFO("info, %f", 1.1);
-    LOG_WRAN("warn, %c", 's');
+    LOG_WARN("warn, %c", 's');
     LOG_ERR("error, %s", "test");
     
     errno = 2;
