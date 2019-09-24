@@ -1,6 +1,7 @@
 # ============================= source ============================================
 SET(base_srcs 
-    Timestamp.cpp CurrentThread.cpp
+    Timestamp.cpp 
+    CurrentThread.cpp
 )
 
 # ============================= build =============================================

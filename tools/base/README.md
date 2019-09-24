@@ -13,3 +13,6 @@ CurrentThread名称空间，定义了与当前线程相关的函数，比如：�
 
 ## SourceFile
 源文件类，用于提取basename
+
+## Singleton
+单例模板类，用于将其他类转换成单例类使用

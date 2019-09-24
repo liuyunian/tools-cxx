@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(/usr/local/include)
 LINK_DIRECTORIES(/usr/local/bin)
 
 ADD_SUBDIRECTORY(tools/base)
+ADD_SUBDIRECTORY(tools/config)
 ADD_SUBDIRECTORY(tools/error)
 ADD_SUBDIRECTORY(tools/log)
 ADD_SUBDIRECTORY(tools/timer)

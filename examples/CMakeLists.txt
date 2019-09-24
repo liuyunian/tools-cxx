@@ -21,3 +21,12 @@ ADD_EXECUTABLE(timer_test timer_test.cpp)
 TARGET_LINK_LIBRARIES(timer_test tools_timer pthread)
 
 ADD_EXECUTABLE(alarm_test alarm_test.cpp)
+
+ADD_EXECUTABLE(Singleton_test base_Singleton_test.cpp)
+TARGET_LINK_LIBRARIES(Singleton_test tools_base pthread)
+
+ADD_EXECUTABLE(config_test config_test.cpp)
+TARGET_LINK_LIBRARIES(config_test tools_config tools_log tools_base)
+
+ADD_EXECUTABLE(config_Singleton_test config_Singleton_test.cpp)
+TARGET_LINK_LIBRARIES(config_Singleton_test tools_config tools_log tools_base pthread)
