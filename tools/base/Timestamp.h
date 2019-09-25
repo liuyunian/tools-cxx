@@ -21,6 +21,14 @@ public:
     std::string to_string() const;
     std::string to_formattedString(bool showMicroseconds = true) const;
 
+    int64_t get_microsecondsSinceEpoch() const {
+        return m_microsecondsSinceEpoch;
+    }
+
+    static Timestamp invalid(){
+        return Timestamp();
+    }
+
     static Timestamp now();
 
     static const int k_microsecondsPerSecond = 1000 * 1000;
@@ -28,5 +36,15 @@ public:
 private:
     int64_t m_microsecondsSinceEpoch;
 };
+
+
+/**
+ * @brief 给指定的时间戳增加second秒
+ * @return 返回增加之后的时间戳
+*/
+inline Timestamp add_time(Timestamp timestamp, double second){
+    int64_t delta = static_cast<int64_t>(second * Timestamp::k_microsecondsPerSecond);
+    return Timestamp(timestamp.get_microsecondsSinceEpoch() + delta);
+}
 
 #endif // TIMESTAMP_H_
