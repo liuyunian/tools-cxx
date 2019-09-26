@@ -37,6 +37,14 @@ private:
     int64_t m_microsecondsSinceEpoch;
 };
 
+inline bool operator<(Timestamp lhs, Timestamp rhs) {                                        // 为什么不重载类内的运算符呢？
+  return lhs.get_microsecondsSinceEpoch() < rhs.get_microsecondsSinceEpoch();
+}
+
+inline bool operator==(Timestamp lhs, Timestamp rhs){
+  return lhs.get_microsecondsSinceEpoch() == rhs.get_microsecondsSinceEpoch();
+}
+
 
 /**
  * @brief 给指定的时间戳增加second秒
