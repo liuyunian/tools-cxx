@@ -30,3 +30,9 @@ TARGET_LINK_LIBRARIES(config_test tools_config tools_log tools_base)
 
 ADD_EXECUTABLE(config_Singleton_test config_Singleton_test.cpp)
 TARGET_LINK_LIBRARIES(config_Singleton_test tools_config tools_log tools_base pthread)
+
+ADD_EXECUTABLE(threadpool_test threadpool_test.cpp)
+TARGET_LINK_LIBRARIES(threadpool_test tools_threadpool tools_log tools_base pthread)
+
+ADD_EXECUTABLE(threadpool2_test threadpool2_test.cpp)
+TARGET_LINK_LIBRARIES(threadpool2_test tools_threadpool2 pthread)

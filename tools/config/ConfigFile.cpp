@@ -46,6 +46,8 @@ parseString:
             m_configItemStore.insert({std::string(itemName), std::string(itemContent)});
         }
     }
+
+    return true;
 }
 
 void ConfigFile::trim_tail_space(char * string){ 
