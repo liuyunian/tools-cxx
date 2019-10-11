@@ -2,8 +2,9 @@
 C++工具库 -- 造轮子使人快乐
 
 ## 编译
-* 依赖  
-&nbsp; &nbsp; &nbsp; &nbsp; 1.1 C++11
+* 环境&依赖  
+&nbsp; &nbsp; &nbsp; &nbsp; 1.1 测试OS：ubuntu18.04和MacOS 10.15  
+&nbsp; &nbsp; &nbsp; &nbsp; 1.2 C++11
 
 * 构建  
 &nbsp; &nbsp; &nbsp; &nbsp; 2.1 构建：make  
