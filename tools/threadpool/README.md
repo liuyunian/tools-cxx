@@ -13,6 +13,6 @@
 | call | 向任务队列中添加任务 | const std::function<void()>& -- 要执行的任务 |
 | stop | 线程池停止工作 | void |  
 
-具体如何调用参考[threadpool_test.cpp](/examples/threadpool_test.cpp)  
+具体如何调用参考[threadpool_test.cpp](/examples/threadpool/threadpool_test.cpp)  
 注意：使用时需要链接***pthread***库
 

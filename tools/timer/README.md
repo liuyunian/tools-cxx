@@ -23,6 +23,6 @@
 | async_loop | 循环定时任务 | bool |
 | cancel_timer | 取消定时任务 | void |  
 
-具体如何调用参考[timer_test.cpp](/examples/timer_test.cpp)  
+具体如何调用参考[timer_test.cpp](/examples/timer/timer_test.cpp)  
 注意：使用时需要链接***pthread***库
 

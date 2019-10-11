@@ -15,7 +15,7 @@
 | network_to_host32 | 32位无符号整数 | uint32_t | uint32_t |
 | network_to_host16 | 16位无符号整数 | uint16_t | uint16_t |
 
-具体如何使用参考[Endian_test.cpp](/examples/Endian_test.cpp)  
+具体如何使用参考[Endian_test.cpp](/examples/socket/Endian_test.cpp)  
 
 ## InetAddress -- 网络地址
 对于Unix和Linux，网络地址有多种，常用的有：
@@ -24,7 +24,7 @@
 * IPv6套接字地址结构struct sockaddr_in6  
 
 这里对IPv4和IPv6地址结构进行了封装，使得构建地址、地址之间的转化更简单  
-具体如何使用参考[InetAddress_test.cpp](/examples/InetAddress_test.cpp)
+具体如何使用参考[InetAddress_test.cpp](/examples/socket/InetAddress_test.cpp)
 
 ## SocketsOps -- Socket操作函数
 对诸如socket(), bind(), listen()等函数进行了包装，包装的主要目的是简化错误处理  
@@ -49,8 +49,8 @@ Socket类采用RAII技术对socket文件描述符进行封装，使得文件描�
 ServerSocket类继承自Socket，是对服务器端监听Socket的封装  
 
 这里利用封装的Socket和poll/epoll复用技术实现了三个echo回射服务器和一个客户端
-* [echoClient_test.cpp](/examples/echoClient_test.cpp)
-* [echoServer_test.cpp](/examples/echoServer_test.cpp)
-* [echoServer_poll_test.cpp](/examples/echoServer_poll_test.cpp)
-* [echoServer_epoll_test.cpp](/examples/echoServer_epoll_test.cpp)
+* [echoClient_test.cpp](/examples/socket/echoClient_test.cpp)
+* [echoServer_test.cpp](/examples/socket/echoServer_test.cpp)
+* [echoServer_poll_test.cpp](/examples/socket/echoServer_poll_test.cpp)
+* [echoServer_epoll_test.cpp](/examples/socket/echoServer_epoll_test.cpp)
 

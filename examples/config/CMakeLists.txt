@@ -1,0 +1,5 @@
+ADD_EXECUTABLE(config_test config_test.cpp)
+TARGET_LINK_LIBRARIES(config_test tools_config tools_log tools_base)
+
+ADD_EXECUTABLE(config_Singleton_test config_Singleton_test.cpp)
+TARGET_LINK_LIBRARIES(config_Singleton_test tools_config tools_log tools_base pthread)

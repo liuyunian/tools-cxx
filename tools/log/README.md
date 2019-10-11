@@ -19,7 +19,7 @@
 | LOG_INFO | log_info | INFO | 否 | 无 |
 | LOG_DEBUG | log_debug | DEBUG | 否 | 无 |  
 
-函数如何调用参考：[log_test.cpp](/examples/log_test.cpp)  
+函数如何调用参考：[log_test.cpp](/examples/log/log_test.cpp)  
 编译时链接***libtools_log.a***静态库
 
 ## 日志输出

@@ -1,0 +1,8 @@
+ADD_EXECUTABLE(Timestamp_test Timestamp_test.cpp)
+TARGET_LINK_LIBRARIES(Timestamp_test tools_base)
+
+ADD_EXECUTABLE(CurrentThread_test CurrentThread_test.cpp)
+TARGET_LINK_LIBRARIES(CurrentThread_test tools_base)
+
+ADD_EXECUTABLE(Singleton_test Singleton_test.cpp)
+TARGET_LINK_LIBRARIES(Singleton_test tools_base pthread)

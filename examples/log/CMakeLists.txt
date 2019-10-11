@@ -1,0 +1,2 @@
+ADD_EXECUTABLE(log_test log_test.cpp)
+TARGET_LINK_LIBRARIES(log_test tools_log tools_base)

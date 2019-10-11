@@ -2,23 +2,23 @@
 C++工具库 -- 造轮子使人快乐
 
 ## 编译
-* 环境&依赖  
-&nbsp; &nbsp; &nbsp; &nbsp; 1.1 测试OS：ubuntu18.04和MacOS 10.15  
-&nbsp; &nbsp; &nbsp; &nbsp; 1.2 C++11
+### 环境 & 依赖  
+1. 测试OS：ubuntu18.04和MacOS 10.15  
+2. 测试编译器：gcc version 7.3.0
 
-* 构建  
-&nbsp; &nbsp; &nbsp; &nbsp; 2.1 构建：make  
-&nbsp; &nbsp; &nbsp; &nbsp; 2.2 安装：make install   
-&nbsp; &nbsp; &nbsp; &nbsp; 2.3 卸载：make uninstall  
-&nbsp; &nbsp; &nbsp; &nbsp; 2.4 清理：make clean
+### 构建  
+1. 构建：make  
+2. 安装：make install   
+3. 卸载：make uninstall  
+4. 清理：make clean
 
-* 示例  
-&nbsp; &nbsp; &nbsp; &nbsp; 3.1 示例程序位于examples目录下  
-&nbsp; &nbsp; &nbsp; &nbsp; 3.2 构建：make  
-&nbsp; &nbsp; &nbsp; &nbsp; 3.3 构建生成的可执行程序位于examples/build目录下，./build/xxx即可执行  
-&nbsp; &nbsp; &nbsp; &nbsp; 4.4 清理：make clean
+## 示例  
+示例程序位于examples目录下  
+1. 构建：make  
+2. 执行：构建生成的可执行程序位于examples/build/xxx目录下  
+3. 清理：make clean
 
-## 使用
+## 使用介绍
 * [基础库](/tools/base/README.md)
 * [解析配置文件](/tools/config/README.md)  
 * [错误处理](/tools/error/README.md)

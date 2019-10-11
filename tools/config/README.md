@@ -12,6 +12,7 @@
 * load(const char *) -- 读取参数（配置文件的绝对路径或者相对路径）指定的配置文件并解析保存
 * get<Type>(const std::string &) -- 模板函数，获取指定配置项的内容
 
-具体如何调用参考[config_test.cpp](/examples/config_test.cpp)  
-其中ConfigFile类一般在整个程序中只存在一个实例，所以可以借助[基础库](../base/README.md)中的Singleton类将ConfigFile转换成一个单例类使用，具体如何使用参考[config_Singleton_test.cpp](/examples/config_Singleton_test.cpp) 
+具体如何调用参考[config_test.cpp](/examples/config/config_test.cpp)  
+其中ConfigFile类一般在整个程序中只存在一个实例，所以可以借助[基础库](../base/README.md)中的Singleton类将ConfigFile转换成一个单例类使用  
+具体如何使用参考[config_Singleton_test.cpp](/examples/config/config_Singleton_test.cpp) 
 

@@ -10,6 +10,6 @@
 | --- | --- | :---: |
 | enqueue | 向任务队列中添加任务 | std::future |
 
-具体如何调用参考[threadpool2_test.cpp](/examples/threadpool2_test.cpp)  
+具体如何调用参考[threadpool2_test.cpp](/examples/threadpool/threadpool2_test.cpp)  
 注意：使用时需要链接***pthread***库
 
