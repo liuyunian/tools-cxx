@@ -7,7 +7,9 @@
 
 #include <assert.h>
 
-class ConfigFile{
+#include "tools/base/noncopyable.h"
+
+class ConfigFile : public noncopyable {
 public:
     ConfigFile() = default;
 

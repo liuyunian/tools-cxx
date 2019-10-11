@@ -1,10 +1,11 @@
 #include <iostream>
 #include <thread>
 
-#include <tools_cxx/log.h>
-#include <tools_cxx/Singleton.h>
-#include <tools_cxx/ConfigFile.h>
-#include <tools_cxx/CurrentThread.h>
+#include <tools/base/Singleton.h>
+#include <tools/base/CurrentThread.h>
+#include <tools/log/log.h>
+#include <tools/config/ConfigFile.h>
+
 
 void threadFunc(){
     ConfigFile & cf = Singleton<ConfigFile>::instance();

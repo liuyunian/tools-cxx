@@ -5,9 +5,9 @@
 #include <stdlib.h> // exit abort
 
 #include "log.h"
-#include "../base/Timestamp.h"
-#include "../base/SourceFile.h"
-#include "../base/CurrentThread.h"
+#include "tools/base/Timestamp.h"
+#include "tools/base/SourceFile.h"
+#include "tools/base/CurrentThread.h"
 
 #define LINE_SZ 4096
 

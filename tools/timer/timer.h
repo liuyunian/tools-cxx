@@ -9,7 +9,9 @@
 #include <functional>
 #include <condition_variable>
 
-class Timer{
+#include "tools/base/noncopyable.h"
+
+class Timer : public noncopyable {
 public:
     Timer();
 

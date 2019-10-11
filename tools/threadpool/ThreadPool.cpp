@@ -4,7 +4,7 @@
 #include <pthread.h>
 
 #include "ThreadPool.h"
-#include "../log/log.h"
+#include "tools/log/log.h"
 
 pthread_mutex_t ThreadPool::m_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t ThreadPool::m_cond = PTHREAD_COND_INITIALIZER;

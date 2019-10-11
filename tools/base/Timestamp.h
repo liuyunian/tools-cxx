@@ -21,6 +21,10 @@ public:
     std::string to_string() const;
     std::string to_formattedString(bool showMicroseconds = true) const;
 
+    bool is_valid(){
+        return m_microsecondsSinceEpoch > 0;
+    }
+
     int64_t get_microsecondsSinceEpoch() const {
         return m_microsecondsSinceEpoch;
     }

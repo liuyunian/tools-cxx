@@ -11,7 +11,9 @@
 #include <functional>
 #include <stdexcept>
 
-class ThreadPool {
+#include "tools/base/noncopyable.h"
+
+class ThreadPool : public noncopyable {
 public:
     ThreadPool(size_t);
 

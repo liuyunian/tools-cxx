@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-#include <tools_cxx/timer.h>
+#include <tools/timer/timer.h>
 
 void timerEvent(Timer * timer){
     std::cout << "timer: " << timer << " on time" << std::endl;

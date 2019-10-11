@@ -7,6 +7,6 @@ TARGET_LINK_LIBRARIES(tools_threadpool tools_log pthread)
 # libtools_threadpool.a -- install path = /usr/local/lib
 INSTALL(TARGETS tools_threadpool ARCHIVE DESTINATION lib)
 
-# *.h -- install path = /usr/local/include/tools_cxx
+# *.h -- install path = /usr/local/include/tools/threadpool
 FILE(GLOB HEADERS "*.h")
-INSTALL(FILES ${HEADERS} DESTINATION include/tools_cxx)
+INSTALL(FILES ${HEADERS} DESTINATION include/tools/threadpool)

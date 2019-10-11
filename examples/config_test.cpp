@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include <tools_cxx/ConfigFile.h>
-#include <tools_cxx/log.h>
+#include <tools/log/log.h>
+#include <tools/config/ConfigFile.h>
 
 int main(){
     ConfigFile cf;

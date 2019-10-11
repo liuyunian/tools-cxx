@@ -2,8 +2,8 @@
 #include <string>
 #include <thread>
 
-#include <tools_cxx/Singleton.h>
-#include <tools_cxx/CurrentThread.h>
+#include <tools/base/Singleton.h>
+#include <tools/base/CurrentThread.h>
 
 class Test{
 public:

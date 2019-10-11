@@ -8,7 +8,9 @@
 
 #include <pthread.h>
 
-class ThreadPool{
+#include "tools/base/noncopyable.h"
+
+class ThreadPool : noncopyable{
 public:
     typedef std::function<void()> Task;
 

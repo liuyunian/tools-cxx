@@ -12,6 +12,6 @@ ADD_LIBRARY(tools_base STATIC ${base_srcs})
 # *.a -- install path = /usr/local/lib
 INSTALL(TARGETS tools_base ARCHIVE DESTINATION lib)
 
-# *.h -- install path = /usr/local/include/tools_cxx
+# *.h -- install path = /usr/local/include/tools/base
 FILE(GLOB HEADERS "*.h")
-INSTALL(FILES ${HEADERS} DESTINATION include/tools_cxx)
+INSTALL(FILES ${HEADERS} DESTINATION include/tools/base)

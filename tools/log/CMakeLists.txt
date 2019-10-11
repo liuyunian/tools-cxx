@@ -7,6 +7,6 @@ TARGET_LINK_LIBRARIES(tools_log tools_base)
 # *.a -- install path = /usr/local/lib
 INSTALL(TARGETS tools_log ARCHIVE DESTINATION lib)
 
-# *.h -- install path = /usr/local/include/tools_cxx
+# *.h -- install path = /usr/local/include/tools/log
 FILE(GLOB HEADERS "*.h")
-INSTALL(FILES ${HEADERS} DESTINATION include/tools_cxx)
+INSTALL(FILES ${HEADERS} DESTINATION include/tools/log)
