@@ -10,7 +10,7 @@
 
 class InetAddress : public copyable {
 public:
-    explicit InetAddress(uint16_t port, bool loopbackOnly = false, bool ipv6 = false);
+    explicit InetAddress(uint16_t port = 0, bool loopbackOnly = false, bool ipv6 = false);
 
     InetAddress(const std::string& ip, uint16_t port, bool ipv6 = false);
 

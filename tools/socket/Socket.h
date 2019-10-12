@@ -19,6 +19,8 @@ public:
 
     void set_reuseAddr(bool on);
 
+    void set_reusePort(bool on);
+
 protected:
     const int m_sockfd;
 };

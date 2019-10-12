@@ -21,7 +21,21 @@ void Socket::bind(const InetAddress& localAddr){
 void Socket::set_reuseAddr(bool on){
     int optVal = on ? 1 : 0;
     int ret = ::setsockopt(m_sockfd, SOL_SOCKET, SO_REUSEADDR, &optVal, static_cast<socklen_t>(sizeof(optVal)));
-    if(ret < 0){
+    if(ret < 0 && on){
         LOG_SYSFATAL("Failed to set reuse addr in Socket::set_reuseAddr(bool)");
     }
+}
+
+void Socket::set_reusePort(bool on){
+#ifdef SO_REUSEPORT
+    int optVal = on ? 1:0;
+    int ret = ::setsockopt(m_sockfd, SOL_SOCKET, SO_REUSEPORT, &optVal, static_cast<socklen_t>(sizeof(optVal)));
+        if(ret < 0 && on){
+        LOG_SYSFATAL("Failed to set reuse port in Socket::set_reusePort(bool)");
+    }
+#else
+    if(on){
+        LOG_ERR("SO_REUSEPORT is not supported");
+    }
+#endif
 }
