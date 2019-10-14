@@ -70,7 +70,7 @@ void sockets::close(int sockfd){
 }
 
 void sockets::bind(int sockfd, const struct sockaddr* addr){
-    int ret = ::bind(sockfd, addr, static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+    int ret = ::bind(sockfd, addr, static_cast<socklen_t>(sizeof(*addr)));                  // 在MacOS上第三个参数填sizof(struct sockaddr_in6)运行时会出错 -- Invalid argument
     if(ret < 0){
         LOG_SYSFATAL("Failed to bind addr in sockets::bind(int, const struct sockaddr*)");
     }
@@ -228,7 +228,7 @@ int sockets::accept_nonblocking(int sockfd, struct sockaddr_in6* addr){
 }
 
 void sockets::connect(int sockfd, const struct sockaddr* addr){
-    int ret = ::connect(sockfd, addr, static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+    int ret = ::connect(sockfd, addr, static_cast<socklen_t>(sizeof(*addr)));                       // 在MacOS上第三个参数填sizof(struct sockaddr_in6)运行时会出错 -- Invalid argument
     if(ret < 0){
         LOG_SYSFATAL("Failed to connect server in sockets::connect(int, const struct sockaddr*)");
     }
