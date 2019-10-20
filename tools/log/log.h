@@ -7,7 +7,7 @@ enum LogLevel{
     DEBUG,      // 用于调试
     INFO,       // 提示
     WARN,       // 警告
-    ERROR,        // 错误
+    ERROR,      // 错误
     FATAL,      // 致命错误
     NUM_LOG_LEVELS  // 日志级别数
 };

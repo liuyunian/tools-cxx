@@ -33,8 +33,6 @@
 | :---: | :---: | :---: | :---: |
 | create_socket| 创建阻塞式Socket描述符 | sockfd -- int |
 | create_nonblocking_socket | 创建非阻塞式Socket描述符 | sockfd -- int | 
-| read | -- | ssize_t | 
-| write | -- | ssize_t | 
 | close | -- | void | 
 | bind | -- | void |
 | listen | -- | void | 

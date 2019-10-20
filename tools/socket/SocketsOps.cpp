@@ -53,15 +53,6 @@ int sockets::create_nonblocking_socket(int family){
     return sockfd;
 }
 
-ssize_t sockets::read(int sockfd, void * buf, ssize_t count){
-    memset(buf, 0, count);
-    return ::read(sockfd, buf, count);
-}
-
-ssize_t sockets::write(int sockfd, const void * buf, ssize_t count){
-    return ::write(sockfd, buf, count);
-}
-
 void sockets::close(int sockfd){
     int ret = ::close(sockfd);
     if(ret < 0){
@@ -272,4 +263,28 @@ void sockets::from_ip_and_port(const char * ip, uint16_t port, struct sockaddr_i
     if(ret < 0){
         LOG_SYSFATAL("Failed to call inet_pton in from_ip_and_port");
     }
+}
+
+struct sockaddr_in6 sockets::get_local_addr(int sockfd){
+    struct sockaddr_in6 localAddr;
+    memset(&localAddr, 0, sizeof(localAddr));
+    socklen_t addrLen = static_cast<socklen_t>(sizeof(localAddr));
+    int ret = ::getsockname(sockfd, reinterpret_cast<struct sockaddr*>(&localAddr), &addrLen);
+    if(ret < 0){
+        LOG_SYSFATAL("Failed to call getsockname in get_local_addr");
+    }
+
+    return localAddr;
+}
+
+struct sockaddr_in6 sockets::get_peer_addr(int sockfd){
+    struct sockaddr_in6 peerAddr;
+    memset(&peerAddr, 0, sizeof(peerAddr));
+    socklen_t addrLen = static_cast<socklen_t>(sizeof(peerAddr));
+    int ret = ::getpeername(sockfd, reinterpret_cast<struct sockaddr*>(&peerAddr), &addrLen);
+    if(ret < 0){
+        LOG_SYSFATAL("Failed to call getpeername in get_peer_addr");
+    }
+
+    return peerAddr;
 }

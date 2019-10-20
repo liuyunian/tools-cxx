@@ -1,6 +1,8 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
+#include <sys/types.h>
+
 #include "tools/base/noncopyable.h"
 
 class InetAddress;  // 前向声明
@@ -17,9 +19,17 @@ public:
 
     void bind(const InetAddress& localAddr);
 
-    void set_reuseAddr(bool on);
+    ssize_t read(void * buf, ssize_t count);
 
-    void set_reusePort(bool on);
+    ssize_t write(const void * buf, ssize_t count);
+
+    void set_reuse_address(bool on);
+
+    void set_reuse_port(bool on);
+
+    void set_keep_alive(bool on);
+
+    void set_no_delay(bool on);
 
 protected:
     const int m_sockfd;

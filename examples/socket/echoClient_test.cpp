@@ -19,8 +19,8 @@ int main(){
     char recvBuf[BUFFER_SZ] = {0};
     char sendBuf[BUFFER_SZ] = {0};
     while(fgets(sendBuf, BUFFER_SZ, stdin) != nullptr){
-        sockets::write(socket.get_sockfd(), sendBuf, strlen(sendBuf));
-        sockets::read(socket.get_sockfd(), recvBuf, sizeof(recvBuf));
+        socket.write(sendBuf, strlen(sendBuf));
+        socket.read(recvBuf, sizeof(recvBuf));
 
         fputs(recvBuf, stdout);
         memset(sendBuf, 0, BUFFER_SZ);

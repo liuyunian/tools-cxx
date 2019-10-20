@@ -31,7 +31,7 @@ int main(){
     ServerSocket ss(sockets::create_nonblocking_socket(AF_INET));
 
     InetAddress addr(LISTEN_PORT);
-    ss.set_reuseAddr(true);
+    ss.set_reuse_address(true);
     ss.bind(addr);
 
     struct pollfd pd;
@@ -43,8 +43,8 @@ int main(){
     ss.listen();
     LOG_INFO("服务器监听中...");
 
-    const Socket* connSocket;
-    std::map<int, const Socket*> connectionPool;
+    Socket* connSocket;
+    std::map<int, Socket*> connectionPool;
     int nready;                                                         // 记录poll函数返回的事件数
     char buf[BUFFER_SZ];
     ssize_t len = 0;                                                    // 记录recv()函数的返回值
@@ -91,7 +91,7 @@ int main(){
                 -- nready;
 
                 auto connSocketIter = connectionPool.find(iter->fd);
-                len = sockets::read(connSocketIter->second->get_sockfd(), buf, BUFFER_SZ);
+                len = connSocketIter->second->read(buf, BUFFER_SZ);
                 if(len < 0){
                     LOG_SYSERR("调用recv()接收数据失败");
                 }
@@ -106,7 +106,7 @@ int main(){
                     continue;
                 }
 
-                send(connSocketIter->second->get_sockfd(), buf, strlen(buf), 0);
+                connSocketIter->second->write(buf, strlen(buf));
                 memset(buf, 0, BUFFER_SZ);
             }
         }

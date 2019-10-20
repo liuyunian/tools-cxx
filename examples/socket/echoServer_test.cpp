@@ -19,7 +19,7 @@ int main(){
 
     char buf[BUFFER_SZ];
     ssize_t len = 0;
-    const Socket* connSocket;
+    Socket* connSocket;
     for(;;){
         connSocket = ss.accept(nullptr);
         if(connSocket == nullptr){ // expected error
@@ -27,8 +27,8 @@ int main(){
             continue;
         }
 
-        while((len = sockets::read(connSocket->get_sockfd(), buf, BUFFER_SZ)) > 0){
-            sockets::write(connSocket->get_sockfd(), buf, strlen(buf));
+        while((len = connSocket->read(buf, BUFFER_SZ)) > 0){
+            connSocket->write(buf, strlen(buf));
         }
 
         delete connSocket;

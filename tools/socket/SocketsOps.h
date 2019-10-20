@@ -9,10 +9,6 @@ int create_socket(int family);
 
 int create_nonblocking_socket(int family);
 
-ssize_t read(int sockfd, void * buf, ssize_t count);
-
-ssize_t write(int sockfd, const void * buf, ssize_t count);
-
 void close(int sockfd);
 
 // server
@@ -38,6 +34,9 @@ void from_ip_and_port(const char * ip, uint16_t port, struct sockaddr_in* addr);
 
 void from_ip_and_port(const char * ip, uint16_t port, struct sockaddr_in6* addr);
 
+struct sockaddr_in6 get_local_addr(int sockfd);
+
+struct sockaddr_in6 get_peer_addr(int sockfd);
 } // namespace sockets
 
 #endif // SOCKETSOPS_H_

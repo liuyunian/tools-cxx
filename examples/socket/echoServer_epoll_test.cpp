@@ -23,7 +23,7 @@ int main(){
     ServerSocket ss(sockets::create_nonblocking_socket(AF_INET));
 
     InetAddress addr(LISTEN_PORT);
-    ss.set_reuseAddr(true);
+    ss.set_reuse_address(true);
     ss.bind(addr);
 
     int epfd = epoll_create1(EPOLL_CLOEXEC);
@@ -90,7 +90,7 @@ int main(){
                 }
                 else{
                     Socket* connSocket = static_cast<Socket*>(revent.data.ptr);
-                    len = sockets::read(connSocket->get_sockfd(), buf, BUFFER_SZ);
+                    len = connSocket->read(buf, BUFFER_SZ);
                     if(len < 0){
                         LOG_SYSERR("调用recv()接收数据失败");
                     }
@@ -101,7 +101,7 @@ int main(){
                         continue;
                     }
 
-                    sockets::write(connSocket->get_sockfd(), buf, strlen(buf));
+                    connSocket->write(buf, strlen(buf));
                     memset(buf, 0, BUFFER_SZ);
                 }
             }
