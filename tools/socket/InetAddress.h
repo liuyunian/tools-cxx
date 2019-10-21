@@ -35,7 +35,7 @@ public:
     /*
      * @brief 获取网络序ip -- 限制于ipv4
      */
-    uint32_t get_ipNetEndian() const {
+    uint32_t get_netendian_ip() const {
         assert(get_family() == AF_INET);
         return m_addr.sin_addr.s_addr;
     }
@@ -43,7 +43,7 @@ public:
     /*
      * @brief 获取网络序port
      */
-    uint16_t get_portNetEndian() const {
+    uint16_t get_netendian_port() const {
         return m_addr.sin_port;
     }
 

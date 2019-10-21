@@ -13,7 +13,7 @@
 
 #include "tools/base/noncopyable.h"
 
-class ThreadPool : public noncopyable {
+class ThreadPool : noncopyable {
 public:
     ThreadPool(size_t);
 

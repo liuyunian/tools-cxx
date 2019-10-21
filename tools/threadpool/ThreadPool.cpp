@@ -29,7 +29,7 @@ void ThreadPool::create(size_t numThreads){
     for(int i = 0; i < m_threadNum; ++ i){
         newThread = new ThreadItem();
         m_threadVec.push_back(newThread);
-        pthread_create(&newThread->ptid, NULL, thread_entryFunc, newThread);
+        pthread_create(&newThread->ptid, NULL, thread_func, newThread);
     }
 
 label:
@@ -41,7 +41,7 @@ label:
     }
 }
 
-void * ThreadPool::thread_entryFunc(void * arg){
+void * ThreadPool::thread_func(void * arg){
     ThreadItem * thread = static_cast<ThreadItem *>(arg);
 
     for(;;){

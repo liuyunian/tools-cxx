@@ -8,31 +8,30 @@ class SourceFile                                                                
 {
 public:
     template<int N>                                                                     // 构造函数还能是模板函数？？，参数是char数组
-    SourceFile(const char (&arr)[N])                                                    // 用于接收字符串常量 -- "liuyunian"
-        : data_(arr),
-        size_(N-1)
+    SourceFile(const char (&arr)[N]) :                                                  // 用于接收字符串常量 -- "liuyunian"
+        m_data(arr),
+        m_size(N-1)
     {
-        const char* slash = strrchr(data_, '/'); // builtin function                    -- 内置函数
-        if (slash)
-        {
-        data_ = slash + 1;
-        size_ -= static_cast<int>(data_ - arr);
+        const char* slash = strrchr(m_data, '/');                                       // builtin function -- 内置函数
+        if (slash){
+            m_data = slash + 1;
+            m_size -= static_cast<int>(m_data - arr);
         }
     }
 
-    explicit SourceFile(const char* filename)                                           // 用于接收字符串变量 -- const char * str = "liuyunian"
-        : data_(filename)
+    explicit SourceFile(const char* filename) :                                        // 用于接收字符串变量 -- const char * str = "liuyunian"
+        m_data(filename)
     {
         const char* slash = strrchr(filename, '/');
-        if (slash)
-        {
-        data_ = slash + 1;
+        if (slash){
+            m_data = slash + 1;
         }
-        size_ = static_cast<int>(strlen(data_));
+        m_size = static_cast<int>(strlen(m_data));
     }
 
-    const char* data_;
-    int size_;
+public:
+    const char* m_data;
+    int m_size;
 };
 
 #endif // SOURCEFILE_H_

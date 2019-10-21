@@ -19,13 +19,13 @@ public:
     ~Timestamp() = default;
 
     std::string to_string() const;
-    std::string to_formattedString(bool showMicroseconds = true) const;
+    std::string to_formatted_string(bool showMicroseconds = true) const;
 
     bool is_valid(){
         return m_microsecondsSinceEpoch > 0;
     }
 
-    int64_t get_microsecondsSinceEpoch() const {
+    int64_t get_microseconds_since_epoch() const {
         return m_microsecondsSinceEpoch;
     }
 
@@ -42,11 +42,11 @@ private:
 };
 
 inline bool operator<(Timestamp lhs, Timestamp rhs) {                                        // 为什么不重载类内的运算符呢？
-  return lhs.get_microsecondsSinceEpoch() < rhs.get_microsecondsSinceEpoch();
+    return lhs.get_microseconds_since_epoch() < rhs.get_microseconds_since_epoch();
 }
 
 inline bool operator==(Timestamp lhs, Timestamp rhs){
-  return lhs.get_microsecondsSinceEpoch() == rhs.get_microsecondsSinceEpoch();
+    return lhs.get_microseconds_since_epoch() == rhs.get_microseconds_since_epoch();
 }
 
 
@@ -56,7 +56,7 @@ inline bool operator==(Timestamp lhs, Timestamp rhs){
 */
 inline Timestamp add_time(Timestamp timestamp, double second){
     int64_t delta = static_cast<int64_t>(second * Timestamp::k_microsecondsPerSecond);
-    return Timestamp(timestamp.get_microsecondsSinceEpoch() + delta);
+    return Timestamp(timestamp.get_microseconds_since_epoch() + delta);
 }
 
 #endif // TIMESTAMP_H_

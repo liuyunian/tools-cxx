@@ -75,7 +75,7 @@ private:
     std::atomic_bool m_bTryExpired;    // 是否尝试让任务过期
     std::atomic_bool m_bLoop;          // 定时器是否循环
     
-    std::thread * m_thread;
+    std::thread* m_thread;
     std::mutex m_mutex;
     std::condition_variable_any m_condition;
 };

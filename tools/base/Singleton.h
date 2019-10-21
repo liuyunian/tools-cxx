@@ -21,7 +21,7 @@ public:
 
     ~Singleton() = delete;                      // 禁用析构函数
 
-    static T & instance(){
+    static T& instance(){
         pthread_once(&m_ponce, &Singleton::init);
 
         assert(m_instance != nullptr);
@@ -54,6 +54,6 @@ template<typename T>
 pthread_once_t Singleton<T>::m_ponce = PTHREAD_ONCE_INIT;
 
 template<typename T>
-T * Singleton<T>::m_instance = nullptr;
+T* Singleton<T>::m_instance = nullptr;
 
 #endif // SINGLETON_H_

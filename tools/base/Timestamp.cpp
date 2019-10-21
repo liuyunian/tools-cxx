@@ -11,23 +11,21 @@ std::string Timestamp::to_string() const {
     return buf;																				    // 所以如果要跨平台打印in64_t就要使用一个统一的格式，也就是这里的PRId64z，其本质是字符串"lld"(32bit) or "ld"(64bit)
 }
 
-std::string Timestamp::to_formattedString(bool showMicroseconds) const {
+std::string Timestamp::to_formatted_string(bool showMicroseconds) const {
     char buf[64] = {0};
     time_t seconds = static_cast<time_t>(m_microsecondsSinceEpoch / k_microsecondsPerSecond); 	// time_t本质是long int
     struct tm tm_time;																		    // 用于保存时间和日期
-    // gmtime_r(&seconds, &tm_time);																// 将time_t类型表示的时间分解填充到struct tm结构中，与之类似的gmtime(const time_t * timer)函数，不用提供自行定义的struct tm对象
+    // gmtime_r(&seconds, &tm_time);															// 将time_t类型表示的时间分解填充到struct tm结构中，与之类似的gmtime(const time_t * timer)函数，不用提供自行定义的struct tm对象
     localtime_r(&seconds, &tm_time);                                                            // localtime_r和gmtime_r区别在于时区，gmtime_r采用的UTC标准，而localtime_r则是采用本地时区（比如CST中国标准时间），与之类似的是localtime(const time_t * timer)函数
 
-    if (showMicroseconds)
-    {
+    if(showMicroseconds){
         int microseconds = static_cast<int>(m_microsecondsSinceEpoch % k_microsecondsPerSecond);
         snprintf(buf, sizeof(buf), "%4d%02d%02d %02d:%02d:%02d.%06d",
                 tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday,
                 tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec,
                 microseconds);
     }
-    else
-    {
+    else{
         snprintf(buf, sizeof(buf), "%4d%02d%02d %02d:%02d:%02d",
                 tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday,
                 tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);

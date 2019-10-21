@@ -2,7 +2,7 @@
 #include <tools/log/log.h>
 
 int main(){
-    log_setlevel(DEBUG);
+    log_set_level(DEBUG);
 
     LOG_DEBUG("debug, %d", 0);
     LOG_INFO("info, %f", 1.1);

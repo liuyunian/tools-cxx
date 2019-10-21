@@ -9,16 +9,16 @@
 
 #include "tools/base/noncopyable.h"
 
-class ConfigFile : public noncopyable {
+class ConfigFile : noncopyable {
 public:
     ConfigFile() = default;
 
     ~ConfigFile() = default;
 
-    bool load(const char * configFileName);
+    bool load(const char* configFileName);
 
     template<typename T>
-    const T get(const std::string & itemName){
+    const T get(const std::string& itemName){
         auto iter = m_configItemStore.find(itemName);
         assert(iter != m_configItemStore.end());
 

@@ -17,12 +17,12 @@ int get_tid(){
     return t_cachedTid;
 }
 
-const char * get_tidString(){                                                               // 返回tid字符串形式，用在日志打印中
+const char* get_tid_string(){                                                               // 返回tid字符串形式，用在日志打印中
     cache_tid();
     return t_tidString;
 }
 
-int get_tidStringLength(){                                                                  // 返回tid字符串形式的长度，用在日志打印中
+int get_tid_string_length(){                                                                // 返回tid字符串形式的长度，用在日志打印中
     cache_tid();
     return t_tidStringLength;
 }
@@ -30,7 +30,7 @@ int get_tidStringLength(){                                                      
 void cache_tid(){
     if(__builtin_expect(t_cachedTid == 0, 0)){
         t_cachedTid = ::syscall(SYS_gettid);                                                // 通过gettid获取真实的线程id -- tid
-        t_tidStringLength = snprintf(t_tidString, sizeof t_tidString, "%d", t_cachedTid);   // tid的字符串形式
+        t_tidStringLength = snprintf(t_tidString, sizeof(t_tidString), "%d", t_cachedTid);  // tid的字符串形式
     }
 }
 

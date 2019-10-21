@@ -5,7 +5,7 @@
 * C printf(fmt, ...)风格 -- LOG_INFO("hello world, %d", 10);
 * 日志函数是分散的 -- LOG_WARN()、LOG_INFO()、LOG_DEBUG()...
 * 5种日志级别 -- FATAL、ERROR、WARN、INFO、DEBUG
-* 两种设置默认日志级别的方式 -- 环境变量和调用log_setlevel()  
+* 两种设置默认日志级别的方式 -- 环境变量和调用log_set_level()  
 
 ## 使用
 

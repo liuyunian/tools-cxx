@@ -12,7 +12,7 @@ enum LogLevel{
     NUM_LOG_LEVELS  // 日志级别数
 };
 
-extern void log_setlevel(LogLevel level);
+extern void log_set_level(LogLevel level);
 
 extern void log_fatal(const char * file, int line, const char * fmt, ...);
 

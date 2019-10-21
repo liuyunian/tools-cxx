@@ -32,7 +32,7 @@ public:
     void stop();
 
 private:
-    static void * thread_entryFunc(void * arg);
+    static void* thread_func(void* arg);
 
 private:
     static pthread_mutex_t m_mutex;
@@ -44,7 +44,7 @@ private:
     static std::queue<Task> m_taskQue;      // 任务队列
 
     int m_threadNum;
-    std::vector<ThreadItem *> m_threadVec;
+    std::vector<ThreadItem*> m_threadVec;
 };
 
 #endif // THREADPOOL_H_

@@ -66,5 +66,5 @@ std::string InetAddress::to_ip_and_port() const {
 }
 
 uint16_t InetAddress::to_port() const {
-    return sockets::network_to_host16(this->get_portNetEndian());
+    return sockets::network_to_host16(this->get_netendian_port());
 }
