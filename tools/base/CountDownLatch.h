@@ -16,7 +16,7 @@ public:
 
     void wait();                            // 同步等待计数器减为0
 
-    void countDown();                       // 计数器减1
+    void count_down();                       // 计数器减1
 
 private:
     mutable std::mutex m_mutex;

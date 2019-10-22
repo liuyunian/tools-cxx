@@ -9,23 +9,18 @@
 #include <pthread.h>
 
 #include "tools/base/noncopyable.h"
+#include "tools/base/CountDownLatch.h"
 
 class ThreadPool : noncopyable{
 public:
     typedef std::function<void()> Task;
 
-    ThreadPool();
+    ThreadPool(size_t numThreads);
+    
     ~ThreadPool();
 
-    struct ThreadItem{
-        pthread_t ptid;
-        std::atomic_bool isRunning;
-
-        ThreadItem() : isRunning(false){}
-    };
-
 public:
-    void create(size_t numThreads);
+    void start();
 
     void call(const Task& task);
 
@@ -35,16 +30,16 @@ private:
     static void* thread_func(void* arg);
 
 private:
-    static pthread_mutex_t m_mutex;
-    static pthread_cond_t m_cond;
-
-    static std::atomic<bool> m_stop;        // 线程池是否停止工作
-    static std::atomic<int> m_runningNum;   // 记录正在运行的线程数，用于调整线程池大小
-
-    static std::queue<Task> m_taskQue;      // 任务队列
-
     int m_threadNum;
-    std::vector<ThreadItem*> m_threadVec;
+    std::atomic<bool> m_stop;           // 线程池是否停止工作
+    std::atomic<int> m_runningNum;      // 记录正在运行的线程数，用于调整线程池大小
+
+    CountDownLatch m_latch;             // 倒计时，用主线程同步
+    std::vector<pthread_t> m_threads;   // 记录创建的线程，用于join
+
+    pthread_mutex_t m_mutex;
+    pthread_cond_t m_cond;
+    std::queue<Task> m_taskQue;         // 任务队列
 };
 
 #endif // THREADPOOL_H_

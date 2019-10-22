@@ -14,7 +14,7 @@ void CountDownLatch::wait(){
     }
 }
 
-void CountDownLatch::countDown(){
+void CountDownLatch::count_down(){
     std::unique_lock<std::mutex> ul(m_mutex);
     -- m_count;
     if(m_count == 0){

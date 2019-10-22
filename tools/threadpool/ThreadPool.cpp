@@ -6,69 +6,28 @@
 #include "ThreadPool.h"
 #include "tools/log/log.h"
 
-pthread_mutex_t ThreadPool::m_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t ThreadPool::m_cond = PTHREAD_COND_INITIALIZER;
-
-std::atomic<bool> ThreadPool::m_stop(false);        // 线程池是否停止工作
-std::atomic<int> ThreadPool::m_runningNum(0);       // 记录正在运行的线程数
-std::queue<ThreadPool::Task> ThreadPool::m_taskQue; // 任务队列
-
-ThreadPool::ThreadPool() : 
-    m_threadNum(0),
-    m_threadVec(0){}
+ThreadPool::ThreadPool(size_t numThreads) : 
+    m_threadNum(numThreads),
+    m_stop(false),
+    m_runningNum(0),
+    m_latch(numThreads),
+    m_threads(numThreads),
+    m_mutex(PTHREAD_MUTEX_INITIALIZER),
+    m_cond(PTHREAD_COND_INITIALIZER)
+{}
 
 ThreadPool::~ThreadPool(){
     stop();
 }
 
-void ThreadPool::create(size_t numThreads){
-    ThreadItem * newThread;
-    
-    m_threadNum = numThreads;
-    m_threadVec.reserve(m_threadNum);
+void ThreadPool::start(){
     for(int i = 0; i < m_threadNum; ++ i){
-        newThread = new ThreadItem();
-        m_threadVec.push_back(newThread);
-        pthread_create(&newThread->ptid, NULL, thread_func, newThread);
+        pthread_t ptid;
+        pthread_create(&ptid, NULL, thread_func, this);
+        m_threads.push_back(ptid);
     }
 
-label:
-    for(auto & thread : m_threadVec){   // 等待创建的线程都准备好
-        if(!thread->isRunning){
-            usleep(10 * 1000); 
-            goto label;
-        }
-    }
-}
-
-void * ThreadPool::thread_func(void * arg){
-    ThreadItem * thread = static_cast<ThreadItem *>(arg);
-
-    for(;;){
-        pthread_mutex_lock(&m_mutex);
-        while(!m_stop && m_taskQue.empty()){
-            if(!thread->isRunning){
-                thread->isRunning = true;
-            }
-
-            pthread_cond_wait(&m_cond, &m_mutex);
-        }
-
-        if(m_stop){
-            pthread_mutex_unlock(&m_mutex);
-            break;
-        }
-
-        Task task = std::move(m_taskQue.front());
-        m_taskQue.pop();
-        pthread_mutex_unlock(&m_mutex);
-
-        ++ m_runningNum;
-        task();
-        -- m_runningNum;
-    }
-
-    return (void *)0;
+    m_latch.wait();
 }
 
 void ThreadPool::call(const Task& task){
@@ -91,9 +50,38 @@ void ThreadPool::stop(){
 
     pthread_cond_broadcast(&m_cond);
 
-    for(auto & thread : m_threadVec){
-        pthread_join(thread->ptid, NULL);
-        delete thread;
+    for(auto& ptid : m_threads){
+        pthread_join(ptid, NULL);
     }
-    m_threadVec.clear();
+    m_threads.clear();
+}
+
+void* ThreadPool::thread_func(void* arg){
+    ThreadPool* pool = static_cast<ThreadPool*>(arg);
+
+    for(;;){
+        pthread_mutex_lock(&(pool->m_mutex));
+        while(!pool->m_stop && pool->m_taskQue.empty()){
+            if(pool->m_latch.get_count() != 0){ // 计数器不为0，表示线程创建阶段
+                pool->m_latch.count_down();
+            }
+
+            pthread_cond_wait(&(pool->m_cond), &(pool->m_mutex));
+        }
+
+        if(pool->m_stop){
+            pthread_mutex_unlock(&(pool->m_mutex));
+            break;
+        }
+
+        Task task = std::move(pool->m_taskQue.front());
+        pool->m_taskQue.pop();
+        pthread_mutex_unlock(&(pool->m_mutex));
+
+        ++ pool->m_runningNum;
+        task();
+        -- pool->m_runningNum;
+    }
+
+    return (void *)0;
 }

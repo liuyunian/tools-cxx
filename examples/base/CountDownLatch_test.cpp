@@ -14,7 +14,7 @@ int main(){
         std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // sleep 2s
         LOG_INFO("thread t1 stop, pid = %d, tid = %d", getpid(), CurrentThread::get_tid());
 
-        cdl.countDown();
+        cdl.count_down();
     });
 
     std::thread t2([&cdl]{
@@ -22,7 +22,7 @@ int main(){
         std::this_thread::sleep_for(std::chrono::milliseconds(5000)); // sleep 2s
         LOG_INFO("thread t2 stop, pid = %d, tid = %d", getpid(), CurrentThread::get_tid());
 
-        cdl.countDown();
+        cdl.count_down();
     });
 
     cdl.wait();

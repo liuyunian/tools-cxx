@@ -1,20 +1,20 @@
-#include <iostream>
-
 #include <unistd.h>
 
+#include <tools/log/log.h>
+#include <tools/base/CurrentThread.h>
 #include <tools/threadpool/ThreadPool.h>
 
 void func1(){
-    std::cout << "test thread func1" << std::endl;
+    LOG_INFO("test thread func1 pid = %d, tid = %d", getpid(), CurrentThread::get_tid());
 }
 
 void func2(int num){
-    std::cout << "test thread func2, num = " << num << std::endl;
+    LOG_INFO("test thread func2, num = %d, pid = %d, tid = %d", num, getpid(), CurrentThread::get_tid());
 }
 
 int main(){
-    ThreadPool tp;
-    tp.create(5);
+    ThreadPool tp(5);
+    tp.start();
 
     for(int i = 15; i > 0; -- i){
         if(i % 2 == 0){
