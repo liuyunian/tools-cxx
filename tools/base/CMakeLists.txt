@@ -1,6 +1,7 @@
 # ============================= source ============================================
 SET(base_srcs 
     Timestamp.cpp 
+    CountDownLatch.cpp
     CurrentThread.cpp
 )
 

@@ -8,6 +8,9 @@
 ## Timestamp
 时间戳类，获取当前时间、格式化时间戳 ...
 
+## CountDownLatch
+并发编程高级构件，用于线程间的同步
+
 ## CurrentThread
 CurrentThread名称空间，定义了与当前线程相关的函数，比如：获取当前线程的真实ID ...
 
