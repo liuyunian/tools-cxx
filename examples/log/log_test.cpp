@@ -14,9 +14,17 @@ int main(){
 
     // LOG_FATAL("fatal, %u", -1);
     
-    int a;
-    errno = 3;
-    LOG_SYSFATAL("sysfatal, %p", &a);
+    // int a;
+    // errno = 3;
+    // LOG_SYSFATAL("sysfatal, %p", &a);
+
+    // check_not_null
+    int b = 5;
+    int* p = &b;
+    CHECK_NOT_NULLPTR(p);
+
+    p = nullptr;
+    CHECK_NOT_NULLPTR(p);
 
     return 0;
 }

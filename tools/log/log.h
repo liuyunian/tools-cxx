@@ -14,19 +14,19 @@ enum LogLevel{
 
 extern void log_set_level(LogLevel level);
 
-extern void log_fatal(const char * file, int line, const char * fmt, ...);
+extern void log_fatal(const char* file, int line, const char* fmt, ...);
 
-extern void log_sysfatal(const char * file, int line, const char * fmt, ...);
+extern void log_sysfatal(const char* file, int line, const char* fmt, ...);
 
-extern void log_err(const char * file, int line, const char * fmt, ...);
+extern void log_err(const char* file, int line, const char* fmt, ...);
 
-extern void log_syserr(const char * file, int line, const char * fmt, ...);
+extern void log_syserr(const char* file, int line, const char* fmt, ...);
 
-extern void log_warn(const char * file, int line, const char * fmt, ...);
+extern void log_warn(const char* file, int line, const char* fmt, ...);
 
-extern void log_info(const char * file, int line, const char * fmt, ...);
+extern void log_info(const char* file, int line, const char* fmt, ...);
 
-extern void log_debug(const char * file, int line, const char * fmt, ...);
+extern void log_debug(const char* file, int line, const char* fmt, ...);
 
 
 #define LOG_FATAL(fmt, ...) log_fatal(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
@@ -42,5 +42,19 @@ extern void log_debug(const char * file, int line, const char * fmt, ...);
 #define LOG_INFO(fmt, ...) log_info(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 #define LOG_DEBUG(fmt, ...) log_debug(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+
+// Taken from muduo/logging.h
+// Check that the input is non nullptr.  This very useful in constructor initializer lists                  -- 检查输入参数不为nullptr，这对于构造函数初始化列表非常有用
+#define CHECK_NOT_NULLPTR(val) \
+  ::Check_Not_Nullptr(__FILE__, __LINE__, "'" #val "' Must be non nullptr", (val))
+
+// A small helper for CHECK_NOTNULL().
+template <typename T>
+T* Check_Not_Nullptr(const char* file, int line, const char* names, T* ptr){                                // 检查参数ptr不是nullptr，如果ptr为nullptr，输出FATAL日志信息
+    if (ptr == nullptr){
+        log_fatal(file, line, names);
+    }
+    return ptr;
+}
 
 #endif
