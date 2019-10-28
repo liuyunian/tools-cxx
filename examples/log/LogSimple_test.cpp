@@ -1,5 +1,5 @@
 #include <errno.h>
-#include <tools/log/log.h>
+#include <tools/logSimple/LogSimple.h>
 
 int main(){
     log_set_level(DEBUG);

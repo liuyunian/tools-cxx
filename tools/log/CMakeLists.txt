@@ -1,6 +1,11 @@
 # ============================= build =============================================
 # static library
-ADD_LIBRARY(tools_log STATIC log.cpp)
+SET(SRC 
+    log.cpp
+    LogBuffer.cpp
+    LogPrint.cpp)
+
+ADD_LIBRARY(tools_log STATIC ${SRC})
 TARGET_LINK_LIBRARIES(tools_log tools_base)
 
 # ============================= install ==============================================
