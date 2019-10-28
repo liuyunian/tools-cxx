@@ -12,7 +12,13 @@ public:
     LogPrint();
     ~LogPrint() = default;
 
+    const LogBuffer& get_buffer() const {
+        return m_buffer;
+    }
+
     void printf(const char* fmt, ...);
+
+    void vprintf(const char* fmt, va_list args);
 
     // for unit test
     void printf_buffer();
@@ -23,8 +29,6 @@ private:
         Lower,
         Upper
     };
-
-    void vprintf(const char* fmt, va_list args);
 
     void printf_num(uint64_t uint64, HexFlag hex, char padding, uint8_t width);
 
