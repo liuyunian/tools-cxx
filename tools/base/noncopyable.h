@@ -2,9 +2,9 @@
 #define NONCOPYABLE_H_
 
 class noncopyable{
-public:
-    noncopyable(const noncopyable&) = delete;      // 禁用拷贝构造函数
-    void operator=(const noncopyable&) = delete;   // 禁用赋值运算符函数
+privite:
+    noncopyable(const noncopyable&);      // 禁用拷贝构造函数
+    void operator=(const noncopyable&);   // 禁用赋值运算符函数
 
 protected:
     noncopyable() = default;
