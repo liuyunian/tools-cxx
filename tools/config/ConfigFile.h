@@ -15,7 +15,7 @@ public:
 
     ~ConfigFile() = default;
 
-    bool load(const char* configFileName);
+    bool load(const char* path);
 
     template<typename T>
     const T get(const std::string& itemName){
@@ -29,9 +29,7 @@ public:
     }
 
 private:
-    void trim_tail_space(char * string);
-
-    void trim_head_space(char * string);
+    void trim_space(std::string& string);
 
 private:
     std::map<std::string, std::string> m_configItemStore;
