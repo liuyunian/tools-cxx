@@ -1,6 +1,8 @@
 #include <iostream>
 #include <thread>
 
+// #include <stdlib.h>
+
 #include <tools/base/Singleton.h>
 #include <tools/base/CurrentThread.h>
 #include <tools/log/log.h>
@@ -23,8 +25,9 @@ void threadFunc(){
 int main(){
     ConfigFile & cf = Singleton<ConfigFile>::instance();
 
-    const char * configFileName = "config_test.conf";
-    if(cf.load(configFileName)){
+    // std::cout << getenv("PWD") << std::endl;             // 通过查看环境变量来确定配置文件的路径应该如何指定
+    const char *configFileName = "config/config_test.conf";
+    if(!cf.load(configFileName)){
         LOG_FATAL("Failed to load config file: %s", configFileName);
     }
 

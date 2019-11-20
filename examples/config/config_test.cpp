@@ -1,14 +1,18 @@
 #include <iostream>
 #include <string>
 
+// #include <stdlib.h>
+
 #include <tools/log/log.h>
 #include <tools/config/ConfigFile.h>
 
 int main(){
     ConfigFile cf;
 
-    const char * configFileName = "config_test.conf";
-    if(cf.load(configFileName)){
+    // std::cout << getenv("PWD") << std::endl;             // 通过查看环境变量来确定配置文件的路径应该如何指定
+    const char *configFileName = "config/config_test.conf";
+
+    if(!cf.load(configFileName)){
         LOG_FATAL("Failed to load config file: %s", configFileName);
     }
 
