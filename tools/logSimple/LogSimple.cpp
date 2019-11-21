@@ -1,12 +1,12 @@
-#include <stdarg.h> // va_list va_start va_end
+#include <stdarg.h> // va_xxx
 #include <errno.h>  // errno
-#include <stdio.h>  //stdout stderr
+#include <stdio.h>  // stdout stderr
 #include <string.h> // strlen strcat
 #include <stdlib.h> // exit abort
+#include <libgen.h> // basename
 
 #include "LogSimple.h"
 #include "tools/base/Timestamp.h"
-#include "tools/base/SourceFile.h"
 #include "tools/base/CurrentThread.h"
 
 #define LINE_SZ 4096
@@ -118,7 +118,7 @@ void log_debug(const char* file, int line, const char* fmt, ...){
 }
 
 static void 
-log_printf(int logLevel, int errnoSave, const char* fmt, va_list ap, const char* file, int line){
+log_printf(int logLevel, int errnoSave, const char *fmt, va_list ap, const char *file, int line){
     int bufLen;
     char buf[LINE_SZ + 1] = {0};
     
@@ -136,8 +136,8 @@ log_printf(int logLevel, int errnoSave, const char* fmt, va_list ap, const char*
     }
 
     bufLen = strlen(buf);
-    const char* baseName = SourceFile(file).m_data;
-    snprintf(buf + bufLen, LINE_SZ - bufLen, " - %s:%d\n", baseName, line);
+    const char *basename = ::basename(const_cast<char*>(file));
+    snprintf(buf + bufLen, LINE_SZ - bufLen, " - %s:%d\n", basename, line);
 
     fflush(stdout);
     fputs(buf, stderr);

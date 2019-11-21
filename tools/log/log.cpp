@@ -2,6 +2,7 @@
 #include <errno.h>  // errno
 #include <string.h> // strerrno 
 #include <stdlib.h> // abort
+#include <libgen.h> // basename
 
 #include "tools/log/log.h"
 #include "tools/base/Timestamp.h"
@@ -37,20 +38,20 @@ const char* LogLevelName[Log::NUM_LOG_LEVELS] = {
     "[FATAL]",
 };
 
-void Log::log(SourceFile file, int line, const char* fmt, ...){
+void Log::log(const char *file, int line, const char *fmt, ...){
     Timestamp now(Timestamp::now());
-    m_print.printf("%s %s %s ", now.to_formatted_string().c_str(), CurrentThread::get_tid_string(), LogLevelName[m_curLevel]);   // 时间戳 线程ID 日志级别
+    m_print.printf("%s %s %s ", now.to_formatted_string().c_str(), CurrentThread::get_tid_string(), LogLevelName[m_curLevel]);  // 时间戳 线程ID 日志级别
     
     va_list args;
     va_start(args, fmt);
-    m_print.vprintf(fmt, args);                                                                                         // 正文
+    m_print.vprintf(fmt, args);                                                                                                 // 正文
     va_end(args);
 
     if(m_errnoSave != 0){
-        m_print.printf(" %s (errno = %d)", m_errnoSave);                                                                // strerrno (errno = ?)
+        m_print.printf(" %s (errno = %d)", m_errnoSave);                                                                        // strerrno (errno = ?)
     }
 
-    m_print.printf(" - %s: %d\n", file.m_data, line);                                                                     // - 所在文件名: 行号
+    m_print.printf(" - %s: %d\n", ::basename(const_cast<char*>(file)), line);                                                   // - 所在文件名: 行号
 }
 
 Log::LogLevel Log::init_threshold_level(){

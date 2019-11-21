@@ -3,10 +3,9 @@
 
 #include <functional>
 
-#include <stdarg.h> // va_start va_list va_end
+#include <stdarg.h> // va_xxx
 
 #include "tools/base/noncopyable.h"
-#include "tools/base/SourceFile.h"
 #include "tools/log/LogPrint.h"
 
 class Log : noncopyable {
@@ -24,7 +23,7 @@ public:
     explicit Log(bool toAbort);
     ~Log();
 
-    void log(SourceFile file, int line, const char* fmt, ...);
+    void log(const char *file, int line, const char* fmt, ...);
 
     static LogLevel get_threshold_level();
     static LogLevel init_threshold_level();
