@@ -6,9 +6,14 @@
 #include <stdint.h>     // int64_t
 #include <sys/time.h>   // time_t
 
-#include "copyable.h"
+#include <boost/operators.hpp>
 
-class Timestamp : copyable{
+#include "tools/base/copyable.h"
+
+class Timestamp : copyable,
+                  public boost::equality_comparable<Timestamp>, // 继承boost::equality_comparable，要求实现==操作符函数，并自动提供'!='操作符函数
+                  public boost::less_than_comparable<Timestamp> // 继承boost::less_than_comparable，要求实现<操作符函数，并自动提供'>' '<=' '>='操作符函数
+{
 public:
     Timestamp() : 
         m_microsecondsSinceEpoch(0){}
@@ -18,9 +23,6 @@ public:
 
     ~Timestamp() = default;
 
-    std::string to_string() const;
-    std::string to_formatted_string(bool showMicroseconds = true) const;
-
     bool is_valid(){
         return m_microsecondsSinceEpoch > 0;
     }
@@ -29,34 +31,52 @@ public:
         return m_microsecondsSinceEpoch;
     }
 
+    int64_t get_seconds_since_epoch() const {
+        return m_microsecondsSinceEpoch / kmicrosecondsPerSecond;
+    }
+
+    /**
+     * @brief 以86400s为单位作为一个period，比如0-86399属于一个period
+    */
+    int64_t get_period() const {
+        return m_microsecondsSinceEpoch / kmicrosecondsPerSecond / ksecondsPerDay;
+    }
+
+    std::string to_string() const;
+    std::string to_formatted_string(bool showMicroseconds = true) const;
+
+    /**
+     * @brief timestamp + second
+     * @return 返回增加之后的时间戳
+    */
+    Timestamp add_time(double second){
+        int64_t delta = static_cast<int64_t>(second * kmicrosecondsPerSecond);
+        return Timestamp(m_microsecondsSinceEpoch + delta);
+    }
+
+    /**
+     * @brief 产生无效的时间戳
+    */
     static Timestamp invalid(){
         return Timestamp();
     }
 
     static Timestamp now();
 
-    static const int k_microsecondsPerSecond = 1000 * 1000;
-
 private:
+    const static int kmicrosecondsPerSecond = 1000 * 1000;
+    const static int ksecondsPerDay = 60*60*24;
+
     int64_t m_microsecondsSinceEpoch;
 };
 
-inline bool operator<(Timestamp lhs, Timestamp rhs) {                                        // 为什么不重载类内的运算符呢？
-    return lhs.get_microseconds_since_epoch() < rhs.get_microseconds_since_epoch();
-}
-
+// 作为友元函数重载'=='和'<'运算符
 inline bool operator==(Timestamp lhs, Timestamp rhs){
     return lhs.get_microseconds_since_epoch() == rhs.get_microseconds_since_epoch();
 }
 
-
-/**
- * @brief 给指定的时间戳增加second秒
- * @return 返回增加之后的时间戳
-*/
-inline Timestamp add_time(Timestamp timestamp, double second){
-    int64_t delta = static_cast<int64_t>(second * Timestamp::k_microsecondsPerSecond);
-    return Timestamp(timestamp.get_microseconds_since_epoch() + delta);
+inline bool operator<(Timestamp lhs, Timestamp rhs) {
+    return lhs.get_microseconds_since_epoch() < rhs.get_microseconds_since_epoch();
 }
 
 #endif // TIMESTAMP_H_
