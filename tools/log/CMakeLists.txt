@@ -3,6 +3,7 @@
 SET(SRC 
     log.cpp
     LogBuffer.cpp
+    LogFile.cpp
     LogPrint.cpp)
 
 ADD_LIBRARY(tools_log STATIC ${SRC})

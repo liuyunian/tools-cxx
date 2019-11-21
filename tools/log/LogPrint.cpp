@@ -136,6 +136,7 @@ void LogPrint::vprintf(const char* fmt, va_list args){
             break;                                  // leave switch
         }
 
+        // %f -- float/doble 浮点数
         case 'f': {
             fn = va_arg(args, double);
             if(fn < 0){
