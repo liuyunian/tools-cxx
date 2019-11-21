@@ -9,3 +9,6 @@ TARGET_LINK_LIBRARIES(Singleton_test tools_base pthread)
 
 ADD_EXECUTABLE(CountDownLatch_test CountDownLatch_test.cpp)
 TARGET_LINK_LIBRARIES(CountDownLatch_test tools_log tools_base pthread)
+
+ADD_EXECUTABLE(ProcessInfo_test ProcessInfo_test.cpp)
+TARGET_LINK_LIBRARIES(ProcessInfo_test tools_base)
