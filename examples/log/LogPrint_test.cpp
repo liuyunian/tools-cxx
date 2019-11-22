@@ -88,5 +88,14 @@ int main(){
         lp.printf_buffer(); 
     }
 
+    // test %b
+    {
+        bool b1 = false;
+        bool b2 = true;
+        LogPrint lp;
+        lp.printf("%b, %b", b1, b2);
+        lp.printf_buffer();
+    }
+
     return 0;
 }

@@ -79,8 +79,3 @@ std::string LogFile::get_file_name(Timestamp &now){
 
     return fileName;
 }
-
-void LogFile::print_file_name(){
-    Timestamp now;
-    std::cout << get_file_name(now) << std::endl;
-}

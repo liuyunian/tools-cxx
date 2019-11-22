@@ -115,6 +115,16 @@ void LogPrint::vprintf(const char* fmt, va_list args){
         }
 
         switch(*fmt){
+        // %b -- bool型
+        case 'b': {
+            int64 = static_cast<int64_t>(va_arg(args, int));
+            string = (int64 == 0) ? const_cast<char*>("false") : const_cast<char*>("true");
+            m_buffer.append(string, strlen(string));
+            
+            ++ fmt;
+            continue;                               // continue while
+        }
+
         // %c -- 字符型
         case 'c': {
             ch = static_cast<char>(va_arg(args, int));
