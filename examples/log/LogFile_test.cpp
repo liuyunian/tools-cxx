@@ -4,31 +4,18 @@
 #include <tools/log/log.h>
 #include <tools/log/LogFile.h>
 
-std::unique_ptr<LogFile> g_logFile;
+int main(int argc, char *argv[]){
+  LogFile lf(::basename(argv[0]), 200*1000);
+  Log::set_output(std::bind(&LogFile::append, &lf, std::placeholders::_1, std::placeholders::_2));
+  Log::set_flush(std::bind(&LogFile::flush, &lf));
 
-void output_func(const char *msg, int len){
-    g_logFile->append(msg, len);
-}
+  const char *line = "1234567890 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
-void flush_func(){
-    g_logFile->flush();
-}
+  for (int i = 0; i < 10000; ++i){
+      LOG_INFO("%s%d", line, i);
 
-int main(int argc, char *argv[])
-{
-    char name[256] = { 0 };
-    strncpy(name, argv[0], sizeof name - 1);
-    g_logFile.reset(new LogFile(::basename(name), 200*1000));
-    Log::set_output(output_func);
-    Log::set_flush(flush_func);
+      usleep(1000);
+  }
 
-    const char *line = "1234567890 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-
-    for (int i = 0; i < 10000; ++i){
-        LOG_INFO("%s%d", line, i);
-
-        usleep(1000);
-    }
-
-    return 0;
+  return 0;
 }
