@@ -1,0 +1,5 @@
+ADD_EXECUTABLE(Scheduler_test Scheduler_test.cpp)
+TARGET_LINK_LIBRARIES(Scheduler_test tools_co tools_base)
+
+ADD_EXECUTABLE(SchedulerThread_test SchedulerThread_test.cpp)
+TARGET_LINK_LIBRARIES(SchedulerThread_test tools_co tools_base pthread)
