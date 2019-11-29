@@ -26,5 +26,4 @@ C++工具库 -- 造轮子使人快乐
 * [简单日志库](/tools/logSimple/README.md)
 * [Socket](/tools/socket/README.md)
 * [线程池一](/tools/threadpool/README.md)
-* [线程池二](/tools/threadpool2/README.md)
 * [定时器](/tools/timer/README.md)
