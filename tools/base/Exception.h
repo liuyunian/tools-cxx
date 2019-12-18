@@ -5,8 +5,7 @@
 
 #include "tools/base/noncopyable.h"
 
-class Exception : noncopyable,
-                  std::runtime_error
+class Exception : public std::runtime_error
 {
 public:
   Exception(const std::string& what);

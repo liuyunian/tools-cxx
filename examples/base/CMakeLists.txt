@@ -1,14 +1,17 @@
-ADD_EXECUTABLE(Timestamp_test Timestamp_test.cpp)
-TARGET_LINK_LIBRARIES(Timestamp_test tools_base)
+ADD_EXECUTABLE(CountDownLatch_test CountDownLatch_test.cpp)
+TARGET_LINK_LIBRARIES(CountDownLatch_test tools_log tools_base pthread)
 
 ADD_EXECUTABLE(CurrentThread_test CurrentThread_test.cpp)
 TARGET_LINK_LIBRARIES(CurrentThread_test tools_base)
 
-ADD_EXECUTABLE(Singleton_test Singleton_test.cpp)
-TARGET_LINK_LIBRARIES(Singleton_test tools_base pthread)
-
-ADD_EXECUTABLE(CountDownLatch_test CountDownLatch_test.cpp)
-TARGET_LINK_LIBRARIES(CountDownLatch_test tools_log tools_base pthread)
+ADD_EXECUTABLE(Exception_test Exception_test.cpp)
+TARGET_LINK_LIBRARIES(Exception_test tools_base)
 
 ADD_EXECUTABLE(ProcessInfo_test ProcessInfo_test.cpp)
 TARGET_LINK_LIBRARIES(ProcessInfo_test tools_base)
+
+ADD_EXECUTABLE(Singleton_test Singleton_test.cpp)
+TARGET_LINK_LIBRARIES(Singleton_test tools_base pthread)
+
+ADD_EXECUTABLE(Timestamp_test Timestamp_test.cpp)
+TARGET_LINK_LIBRARIES(Timestamp_test tools_base)

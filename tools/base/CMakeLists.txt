@@ -1,9 +1,10 @@
 # ============================= source ============================================
 SET(base_srcs 
-    Timestamp.cpp 
-    CountDownLatch.cpp
-    CurrentThread.cpp
-    ProcessInfo.cpp
+  CountDownLatch.cpp
+  CurrentThread.cpp
+  Exception.cpp
+  ProcessInfo.cpp
+  Timestamp.cpp 
 )
 
 # ============================= build =============================================

@@ -11,6 +11,9 @@
 ## CurrentThread
 CurrentThread名称空间，定义了与当前线程相关信息的函数，比如：获取当前线程的真实ID ...
 
+## Exception
+具有堆栈跟踪功能的异常类
+
 ## ProcessInfo
 ProcessInfo名称空间，定义了获取当前进程相关信息的函数，比如：获取当前进程的PID ...
 
