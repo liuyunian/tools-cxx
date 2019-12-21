@@ -1,8 +1,7 @@
 #include <vector>
-#include <map>
 
-#include <poll.h>       // poll
 #include <string.h>     // memset
+#include <unistd.h>     // select
 
 #include <tools/log/log.h>
 #include <tools/base/Exception.h>
@@ -17,36 +16,34 @@
 int main(){
   ServerSocket ss(sockets::create_nonblocking_socket(AF_INET));
   InetAddress addr(LISTEN_PORT);
-  ss.set_reuse_address(true);
   ss.bind(addr);
   ss.listen();
   LOG_INFO("server is listening...");
 
-  std::vector<struct pollfd> pollfds;
-  struct pollfd pd;
-  pd.fd = ss.get_sockfd();
-  pd.events = POLLIN;                                                // 监听读事件 -- 监听套接字的读事件发生时，表示有连接接入
-  pollfds.push_back(pd);
+  int maxfd = ss.get_sockfd();                                    // maxfd用来记录当前最大的文件描述符
+  fd_set allfds, rfds;                                            // allfds用来记录所关心的文件描述符，rfds则作为select的第二个参数，是一个“值-结果”参数
+  FD_ZERO(&allfds);
+  FD_SET(maxfd, &allfds);
 
-  std::map<int, Socket> connPool;
-  int nready;
+  int nready = 0;
+  std::vector<Socket> connPool;
   char buf[BUFFER_SZ];
   ssize_t len = 0;
 
   for(;;){
-    nready = poll(pollfds.data(), pollfds.size(), -1);
+    rfds = allfds;
+    nready = ::select(maxfd+1, &rfds, nullptr, nullptr, nullptr); // 直到一个事件发生时才返回
     if(nready <= 0){
       LOG_WARN("select error");
       continue;
     }
 
-    if(pollfds[0].revents & POLLIN){
+    if(FD_ISSET(ss.get_sockfd(), &rfds)){
       try{
         Socket connSocket = ss.accept_nonblocking(nullptr);
-        pd.fd = connSocket.get_sockfd();
-        pd.events = POLLIN;                                         // 监听读事件 -- 连接套接字的读事件发生时，表示接收到数据
-        pollfds.push_back(pd);
-        connPool.insert({pd.fd, connSocket});
+        maxfd = connSocket.get_sockfd();
+        FD_SET(maxfd, &allfds);
+        connPool.push_back(connSocket);
       }
       catch(const Exception &e){
         LOG_WARN("accept error");
@@ -57,23 +54,22 @@ int main(){
         continue;
       }
     }
-    
-    for(auto iter = pollfds.begin() + 1; iter != pollfds.end();){
-      if(iter->revents & POLLIN){
-        auto connSocketIter = connPool.find(iter->fd);
-        len = connSocketIter->second.read(buf, BUFFER_SZ);
+
+    for(auto iter = connPool.begin(); iter != connPool.end();){
+      if(FD_ISSET(iter->get_sockfd(), &rfds)){
+        len = iter->read(buf, BUFFER_SZ);
         if(len < 0){
           LOG_WARN("read error");
         }
         else if(len == 0){
           LOG_INFO("client disconnects");
-          iter = pollfds.erase(iter);
-          connPool.erase(connSocketIter);
+          FD_CLR(iter->get_sockfd(), &allfds);
+          iter = connPool.erase(iter);
           continue;
         }
         else{
-          connSocketIter->second.write(buf, strlen(buf));
-          memset(buf, 0, BUFFER_SZ);
+          iter->write(buf, len);
+          ::memset(buf, 0, BUFFER_SZ);
         }
 
         -- nready;

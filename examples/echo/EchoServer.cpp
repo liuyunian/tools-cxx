@@ -1,6 +1,7 @@
-#include <string.h> // strlen
+#include <string.h>     // strlen
 #include <netinet/in.h>
 
+#include <tools/base/Exception.h>
 #include <tools/socket/Socket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
@@ -19,19 +20,17 @@ int main(){
 
   char buf[BUFFER_SZ];
   ssize_t len = 0;
-  Socket* connSocket;
   for(;;){
-      connSocket = ss.accept(nullptr);
-      if(connSocket == nullptr){ // expected error
-          // TODO
-          continue;
-      }
+    try{
+      Socket connSocket = ss.accept_nonblocking(nullptr);
 
-      while((len = connSocket->read(buf, BUFFER_SZ)) > 0){
-          connSocket->write(buf, strlen(buf));
+      while(connSocket.read(buf, BUFFER_SZ) > 0){
+        connSocket.write(buf, strlen(buf));
       }
-
-      delete connSocket;
+    }
+    catch(const Exception &e){
+      continue;
+    }
   }
 
   return 0;
