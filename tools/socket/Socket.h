@@ -21,13 +21,15 @@ private:
 
 class Socket : copyable{
 public:
+  Socket();
+
   Socket(int sockfd);
 
   Socket(const Socket &sock);
 
   virtual ~Socket();
 
-  Socket& operator=(const Socket &sock) = delete; // 暂时禁用赋值运算法函数，如果有需求再实现
+  Socket& operator=(const Socket &sock);
 
   inline int get_sockfd() const {
     return m_guard->m_sockfd;

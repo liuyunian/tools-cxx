@@ -16,6 +16,9 @@ SocketGuard::~SocketGuard(){
   sockets::close(m_sockfd);
 }
 
+Socket::Socket() : 
+  m_guard(nullptr){}
+
 Socket::Socket(int sockfd) :
   m_guard(new SocketGuard(sockfd)){}
 
@@ -30,6 +33,15 @@ Socket::~Socket(){
   if(m_guard->m_count == 0){
     delete m_guard;
   }
+}
+
+Socket& Socket::operator=(const Socket &sock){
+  if(m_guard != nullptr){
+    this->~Socket();
+  }
+
+  m_guard = sock.m_guard;
+  ++ m_guard->m_count;
 }
 
 void Socket::bind(const InetAddress &localAddr){
