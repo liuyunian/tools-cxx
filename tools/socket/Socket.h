@@ -3,36 +3,44 @@
 
 #include <sys/types.h>
 
+#include "tools/base/copyable.h"
 #include "tools/base/noncopyable.h"
 
-class InetAddress;  // 前向声明
+class InetAddress;
+class Socket;
 
-class Socket : public noncopyable {
+class SocketGuard : noncopyable {
+private:
+  friend class Socket;
+  SocketGuard(int sockfd);
+  ~SocketGuard();
+
+  const int m_sockfd;
+  int m_count;
+};
+
+class Socket : copyable{
 public:
-    Socket(int sockfd);
+  Socket(int sockfd);
 
-    virtual ~Socket();
+  Socket(const Socket &sock);
 
-    inline int get_sockfd() const {
-        return m_sockfd;
-    }
+  virtual ~Socket();
 
-    void bind(const InetAddress& localAddr);
+  Socket& operator=(const Socket &sock) = delete; // 暂时禁用赋值运算法函数，如果有需求再实现
 
-    ssize_t read(void * buf, ssize_t count);
+  inline int get_sockfd() const {
+    return m_guard->m_sockfd;
+  }
 
-    ssize_t write(const void * buf, ssize_t count);
+  void bind(const InetAddress& localAddr);
 
-    void set_reuse_address(bool on);
+  ssize_t read(void *buf, ssize_t count);
 
-    void set_reuse_port(bool on);
+  ssize_t write(const void *buf, ssize_t count);
 
-    void set_keep_alive(bool on);
-
-    void set_no_delay(bool on);
-
-protected:
-    const int m_sockfd;
+private:
+  SocketGuard *m_guard;
 };
 
 #endif // SOCKET_H_

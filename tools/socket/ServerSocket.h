@@ -1,19 +1,39 @@
 #ifndef SERVERSOCKET_H_
 #define SERVERSOCKET_H_
 
-#include "Socket.h"
+class Socket;
+class InetAddress;
 
-class ServerSocket : public Socket {
+#include "tools/base/noncopyable.h"
+
+class ServerSocket : noncopyable{
 public:
-    ServerSocket(int sockfd) : Socket(sockfd) {}
+  ServerSocket(int sockfd);
 
-    ~ServerSocket() = default;
+  ~ServerSocket();
 
-    void listen();
+  inline int get_sockfd() const {
+    return m_sockfd;
+  }
 
-    Socket* accept(InetAddress* peerAddr);
+  void bind(const InetAddress &localAddr);
 
-    Socket* accept_nonblocking(InetAddress* peerAddr);
+  void listen();
+
+  Socket accept(InetAddress *peerAddr);
+
+  Socket accept_nonblocking(InetAddress *peerAddr);
+
+  void set_reuse_address(bool on);
+
+  void set_reuse_port(bool on);
+
+  void set_keep_alive(bool on);
+
+  void set_no_delay(bool on);
+
+private:
+  const int m_sockfd;
 };
 
 #endif // SERVERSOCKET_H_
