@@ -1,2 +1,0 @@
-ADD_EXECUTABLE(error_test error_test.cpp)
-TARGET_LINK_LIBRARIES(error_test tools_error)
