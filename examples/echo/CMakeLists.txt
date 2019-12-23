@@ -17,3 +17,6 @@ ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 ADD_EXECUTABLE(EchoServer_coroutine EchoServer_coroutine.cpp)
 TARGET_LINK_LIBRARIES(EchoServer_coroutine tools_co tools_socket tools_log tools_base pthread)
+
+ADD_EXECUTABLE(EchoServer_poller EchoServer_poller.cpp)
+TARGET_LINK_LIBRARIES(EchoServer_poller tools_poller tools_socket tools_log tools_base)

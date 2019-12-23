@@ -75,7 +75,7 @@ int main(){
           connPool.erase(connSocketIter);
         }
         else{
-          connSocketIter->second.write(buf, strlen(buf));
+          connSocketIter->second.write(buf, len);
           memset(buf, 0, BUFFER_SZ);
         }
       }
