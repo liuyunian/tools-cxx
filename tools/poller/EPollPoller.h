@@ -15,12 +15,12 @@ public:
 
   virtual ~EPollPoller();
 
-  virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
+  virtual ChannelList& poll(int timeoutMs) override;
   virtual void update_channel(Channel *channel) override;
   virtual void remove_channel(Channel *channel) override;
 
 private:
-  void fill_active_channels(int numEvents, ChannelList *activeChannels) const;
+  void fill_active_channels(int numEvents);
   void update(int op, Channel *channel);
 
 private:

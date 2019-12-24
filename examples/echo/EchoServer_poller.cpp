@@ -34,17 +34,14 @@ int main(){
   char buf[BUFFER_SZ];
   ssize_t len = 0;
 
-  Poller::ChannelList activeChannel;
   for(;;){
-    activeChannel.clear();
-    poller->poll(-1, &activeChannel);
-
-    for(auto &channel : activeChannel){
-      if(!(channel->get_revents() & Poller::READ_EVENT)){
+    Poller::ChannelList activeChannels = poller->poll(-1);
+    for(auto &channelPtr : activeChannels){
+      if(!(channelPtr->get_revents() & Poller::READ_EVENT)){
         continue;
       }
 
-      if(channel->get_fd() == ss.get_sockfd()){
+      if(channelPtr->get_fd() == ss.get_sockfd()){
         try{
           Socket connSocket = ss.accept_nonblocking(nullptr);
           Channel *connChannel = new Channel(connSocket.get_sockfd());
@@ -57,7 +54,7 @@ int main(){
         }
       }
       else{
-        auto connSocketIter = connPool.find(channel);
+        auto connSocketIter = connPool.find(channelPtr);
         len = connSocketIter->second.read(buf, BUFFER_SZ);
         if(len < 0){
           LOG_WARN("read error");

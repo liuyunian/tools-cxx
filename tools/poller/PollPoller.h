@@ -15,12 +15,12 @@ public:
 
   virtual ~PollPoller() = default;
 
-  virtual void poll(int timeoutMs, ChannelList *activeChannels) override;
+  virtual ChannelList& poll(int timeoutMs) override;
   virtual void update_channel(Channel *channel) override;
   virtual void remove_channel(Channel *channel) override;
 
 private:
-  void fill_active_channels(int numEvents, ChannelList *activeChannels) const; 
+  void fill_active_channels(int numEvents); 
 
 private:
   std::vector<struct pollfd> m_pollfdList;

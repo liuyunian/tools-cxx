@@ -27,7 +27,7 @@ EPollPoller::~EPollPoller(){
   close(m_epfd);
 }
 
-void EPollPoller::poll(int timeoutMs, ChannelList *activeChannels){
+Poller::ChannelList& EPollPoller::poll(int timeoutMs){
   int numEvents = ::epoll_wait(m_epfd, m_eventList.data(), m_eventList.size(), timeoutMs);
   if(numEvents < 0){
     if(errno != EINTR){                            // EINTR错误不用报错
@@ -38,19 +38,22 @@ void EPollPoller::poll(int timeoutMs, ChannelList *activeChannels){
     LOG_DEBUG("nothing happended");
   }
   else{
-    fill_active_channels(numEvents, activeChannels);
+    fill_active_channels(numEvents);
 
     if(numEvents == m_eventList.size()){
       m_eventList.resize(m_eventList.size()*2);
     }
   }
+
+  return m_activeChannels;
 }
 
-void EPollPoller::fill_active_channels(int numEvents, ChannelList *activeChannels) const {
+void EPollPoller::fill_active_channels(int numEvents){
   assert(numEvents <= m_eventList.size());
 
   Channel *channel;
   std::map<int, Channel*>::const_iterator iter;
+  m_activeChannels.clear();
   for(int i = 0; i < numEvents; ++ i){
       channel = static_cast<Channel*>(m_eventList[i].data.ptr);
       iter = m_channelStore.find(channel->get_fd());
@@ -58,7 +61,7 @@ void EPollPoller::fill_active_channels(int numEvents, ChannelList *activeChannel
       assert(iter->second == channel);
 
       channel->set_revents(m_eventList[i].events);
-      activeChannels->push_back(channel);
+      m_activeChannels.push_back(channel);
   }
 }
 

@@ -14,7 +14,7 @@ public:
   virtual ~Poller() = default;
 
   typedef std::vector<Channel*> ChannelList;
-  virtual void poll(int timeoutMs, ChannelList *activeChannels) = 0;
+  virtual ChannelList& poll(int timeoutMs) = 0;
 
   virtual void update_channel(Channel *channel) = 0;
 
@@ -28,6 +28,7 @@ public:
   static const int CLOSE_EVENT;
 
 protected:
+  ChannelList m_activeChannels;
   std::map<int, Channel*> m_channelStore;
 };
 

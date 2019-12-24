@@ -6,7 +6,7 @@
 #include "tools/poller/PollPoller.h"
 #include "tools/poller/Channel.h"
 
-void PollPoller::poll(int timeoutMs, ChannelList *activeChannels){
+Poller::ChannelList& PollPoller::poll(int timeoutMs){
   int numEvents = ::poll(m_pollfdList.data(), m_pollfdList.size(), timeoutMs);
   if(numEvents < 0){
     if(errno != EINTR){                            // EINTR错误不用报错
@@ -17,14 +17,16 @@ void PollPoller::poll(int timeoutMs, ChannelList *activeChannels){
     LOG_DEBUG("nothing happended");
   }
   else{
-    fill_active_channels(numEvents, activeChannels);
+    fill_active_channels(numEvents);
   }
+
+  return m_activeChannels;
 }
 
-void PollPoller::fill_active_channels(int numEvents, ChannelList *activeChannels) const {
+void PollPoller::fill_active_channels(int numEvents){
   std::map<int, Channel*>::const_iterator iter;
   Channel *channel;
-
+  m_activeChannels.clear();
   for(auto pollfd = m_pollfdList.begin(); pollfd != m_pollfdList.end() && numEvents > 0; ++ pollfd){
     if(pollfd->revents > 0){
       -- numEvents;
@@ -34,7 +36,7 @@ void PollPoller::fill_active_channels(int numEvents, ChannelList *activeChannels
       channel = iter->second;
       assert(channel->get_fd() == pollfd->fd);
       channel->set_revents(pollfd->revents);
-      activeChannels->push_back(channel);
+      m_activeChannels.push_back(channel);
     }
   }
 }
