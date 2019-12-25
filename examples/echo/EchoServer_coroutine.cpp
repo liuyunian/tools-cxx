@@ -9,19 +9,19 @@
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 #include <tools/socket/ServerSocket.h>
-#include <tools/coroutine/SchedulerThread.h>
+#include <tools/coroutine/CoSchedulerThread.h>
 
 #define LISTEN_PORT 9000
 #define BUFFER_SZ 1024
 
-void echo(Socket connSocket, co::Scheduler *sd){
+void echo(Socket connSocket, CoScheduler *csd){
   int len;
   char buf[BUFFER_SZ];
   for(;;){
     len = connSocket.read(buf, BUFFER_SZ);
     if(len < 0){
       if(errno == EAGAIN){
-        sd->yield();
+        csd->yield();
       }
       else{
         LOG_WARN("read error");
@@ -44,13 +44,13 @@ int main(){
   ss.listen();
   LOG_INFO("server is listening...");
 
-  co::SchedulerThread st;
-  co::Scheduler *s = st.start();
+  CoSchedulerThread cst;
+  CoScheduler *csd = cst.start();
   
   for(;;){
     try{
       Socket connSocket = ss.accept_nonblocking(nullptr);
-      s->create_coroutine(std::bind(echo, connSocket, std::placeholders::_1));
+      csd->create_coroutine(std::bind(echo, connSocket, std::placeholders::_1));
     }
     catch(const Exception &e){
       LOG_WARN("accept error");

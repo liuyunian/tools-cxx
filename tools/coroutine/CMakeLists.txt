@@ -1,12 +1,12 @@
 SET(CO_SRC
-  Scheduler.cpp 
-  SchedulerThread.cpp
+  CoScheduler.cpp 
+  CoSchedulerThread.cpp
 )
 
 SET(CO_HDS
   Coroutine.h
-  Scheduler.h 
-  SchedulerThread.h
+  CoScheduler.h 
+  CoSchedulerThread.h
 )
 
 

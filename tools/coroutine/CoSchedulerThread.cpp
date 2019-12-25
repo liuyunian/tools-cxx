@@ -1,21 +1,19 @@
-#include "tools/coroutine/SchedulerThread.h"
+#include "tools/coroutine/CoSchedulerThread.h"
 
-namespace co {
-
-SchedulerThread::SchedulerThread() : 
+CoSchedulerThread::CoSchedulerThread() : 
   m_scheduler(nullptr)
 {}
 
-SchedulerThread::~SchedulerThread(){
+CoSchedulerThread::~CoSchedulerThread(){
   if(m_scheduler != nullptr){
     m_scheduler->quit();
     m_thread->join();
   }
 }
 
-Scheduler* SchedulerThread::start(){
-  m_thread.reset(new std::thread(std::bind(&SchedulerThread::thread_func, this)));
-  Scheduler *s = nullptr;
+CoScheduler* CoSchedulerThread::start(){
+  m_thread.reset(new std::thread(std::bind(&CoSchedulerThread::thread_func, this)));
+  CoScheduler *s = nullptr;
   {
     std::unique_lock<std::mutex> ul(m_mutex);
     while(m_scheduler == nullptr){
@@ -28,8 +26,8 @@ Scheduler* SchedulerThread::start(){
   return s;
 }
 
-void SchedulerThread::thread_func(){
-  Scheduler s;
+void CoSchedulerThread::thread_func(){
+  CoScheduler s;
 
   {
     std::unique_lock<std::mutex> ul(m_mutex);
@@ -39,5 +37,3 @@ void SchedulerThread::thread_func(){
   m_cond.notify_one();
   s.start();
 }
-
-} // namespace co

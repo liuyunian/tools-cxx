@@ -1,5 +1,5 @@
-#ifndef SCHEDULER_H_
-#define SCHEDULER_H_
+#ifndef COSCHEDULER_H_
+#define COSCHEDULER_H_
 
 #include <map>
 #include <vector>
@@ -14,18 +14,10 @@
 #include "tools/coroutine/Coroutine.h"
 #include "tools/base/CurrentThread.h"
 
-namespace co {
-
-class Scheduler : noncopyable{
+class CoScheduler : noncopyable{
 public:
-  Scheduler(size_t stackSize = 128*1024);
-  ~Scheduler() = default;
-
-  bool is_in_scheduler_thread() const {
-    return m_tid == CurrentThread::get_tid();
-  }
-
-  void assert_in_scheduler_thread();
+  CoScheduler(size_t stackSize = 128*1024);
+  ~CoScheduler() = default;
 
   void start();
 
@@ -37,11 +29,15 @@ public:
   */
   void yield();
 
-  typedef std::function<void(Scheduler*)> Task;
+  typedef std::function<void(CoScheduler*)> Task;
   void create_coroutine(const Task &task);
 
 private:
   static void schedule(void *arg);
+
+  bool is_in_scheduler_thread() const {
+    return m_tid == CurrentThread::get_tid();
+  }
 
   void handle_pending_tasks();
 
@@ -59,6 +55,4 @@ private:
   std::vector<Task> m_pendingTasks;
 };
 
-} // namespace co
-
-#endif // SCHEDULER_H_
+#endif // COSCHEDULER_H_

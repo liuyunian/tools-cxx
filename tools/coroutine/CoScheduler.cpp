@@ -2,13 +2,11 @@
 
 #include <assert.h>
 
-#include "tools/coroutine/Scheduler.h"
+#include "tools/coroutine/CoScheduler.h"
 
-namespace co {
+__thread CoScheduler* tScheduler = nullptr;
 
-__thread Scheduler* tScheduler = nullptr;
-
-Scheduler::Scheduler(size_t stackSize) : 
+CoScheduler::CoScheduler(size_t stackSize) : 
   m_stackSize(stackSize),
   m_tid(CurrentThread::get_tid()),
   m_quit(false),
@@ -20,7 +18,7 @@ Scheduler::Scheduler(size_t stackSize) :
   tScheduler = this;
 }
 
-void Scheduler::start(){
+void CoScheduler::start(){
   m_quit = false;
 
   while(!m_quit){
@@ -65,11 +63,11 @@ void Scheduler::start(){
   }
 }
 
-void Scheduler::quit(){
+void CoScheduler::quit(){
   m_quit = true;
 }
 
-void Scheduler::yield(){
+void CoScheduler::yield(){
   if(m_curCo == -1){
     return;
   }
@@ -81,12 +79,10 @@ void Scheduler::yield(){
   ::swapcontext(iter->second->get_contextptr(), &m_mainContext);
 }
 
-void Scheduler::create_coroutine(const Task &task){
+void CoScheduler::create_coroutine(const Task &task){
   if(!is_in_scheduler_thread() || m_curCo != -1){             // 在调度线程外或者协程中执行创建协程任务
-    {
-      std::unique_lock<std::mutex> ul(m_mutex);
-      m_pendingTasks.push_back(task);
-    }
+    std::unique_lock<std::mutex> ul(m_mutex);
+    m_pendingTasks.push_back(task);
   }
   else{
     auto co = std::make_unique<Coroutine>(m_stackSize, task);
@@ -95,8 +91,8 @@ void Scheduler::create_coroutine(const Task &task){
   }
 }
 
-void Scheduler::schedule(void *arg){
-  Scheduler *sd = static_cast<Scheduler*>(arg);
+void CoScheduler::schedule(void *arg){
+  CoScheduler *sd = static_cast<CoScheduler*>(arg);
   auto iter = sd->m_coStore.find(sd->m_curCo);
   assert(iter != sd->m_coStore.end());
   iter->second->m_task(sd);
@@ -105,7 +101,7 @@ void Scheduler::schedule(void *arg){
   iter->second->set_status(Coroutine::FINISHED);
 }
 
-void Scheduler::handle_pending_tasks(){
+void CoScheduler::handle_pending_tasks(){
   std::vector<Task> tasks;
 
   {
@@ -119,5 +115,3 @@ void Scheduler::handle_pending_tasks(){
     ++ m_coNum;
   }
 }
-
-} // namespace co

@@ -7,9 +7,7 @@
 
 #include "tools/base/noncopyable.h"
 
-namespace co {
-
-class Scheduler;
+class CoScheduler;
 
 class Coroutine : noncopyable {
 public:
@@ -20,7 +18,7 @@ public:
     FINISHED
   };
 
-  typedef std::function<void(Scheduler*)> Task;
+  typedef std::function<void(CoScheduler*)> Task;
   Coroutine(size_t stackSize, const Task &task) : 
     m_task(std::move(task)), 
     m_status(READY), 
@@ -51,9 +49,5 @@ private:
   ucontext_t m_context;
   std::vector<char> m_stack;
 };
-
-} // namespce co
-
-
 
 #endif // COROUTINE_H_
