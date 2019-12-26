@@ -57,6 +57,10 @@ private:
 
   void handle_pending_functor();
 
+  void read_eventfd();
+
+  void write_eventfd();
+
 private:
   const int m_tid;                        // 所属线程的tid
   std::atomic<bool> m_quit;               // 停止定时

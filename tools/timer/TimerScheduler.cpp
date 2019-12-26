@@ -6,11 +6,10 @@
 #include <sys/timerfd.h>    // timerfd_*
 #include <sys/eventfd.h>    // eventfd
 
-#include <tools/log/log.h>
-
+#include "tools/log/log.h"
 #include "tools/timer/TimerScheduler.h"
 
-__thread TimerScheduler *tTimerQueue = nullptr;
+__thread TimerScheduler *tTimerScheduler = nullptr;
 
 const int kPollTimeMs = 10000;
 
@@ -65,22 +64,6 @@ static void read_timerfd(int timerfd){
   }
 }
 
-static void write_eventfd(int eventfd){
-  uint64_t one = 1;
-  ssize_t n = ::write(eventfd, &one, sizeof(one));
-  if(n != sizeof(one)){
-    LOG_SYSERR("write_eventfd error");
-  }
-}
-
-static void read_eventfd(int eventfd){
-  uint64_t one;
-  ssize_t n = ::read(eventfd, &one, sizeof(one));
-  if(n != sizeof(one)){
-    LOG_SYSERR("read_eventfd error");
-  }
-}
-
 TimerScheduler::TimerScheduler() : 
   m_tid(CurrentThread::get_tid()),
   m_quit(false),
@@ -91,12 +74,14 @@ TimerScheduler::TimerScheduler() :
   m_eventfd(create_eventfd()),
   m_eventfdChannel(m_eventfd)
 {
-  assert(tTimerQueue == nullptr);               // 确保一个线程中只有一个TimerQueue对象
-  tTimerQueue = this;
+  assert(tTimerScheduler == nullptr);               // 确保一个线程中只有一个TimerScheduler对象
+  tTimerScheduler = this;
 
+  m_timerfdChannel.set_read_callback(std::bind(&TimerScheduler::handle_event, this));
   m_timerfdChannel.enable_reading();
   m_poller->update_channel(&m_timerfdChannel);
 
+  m_eventfdChannel.set_read_callback(std::bind(&TimerScheduler::read_eventfd, this));
   m_eventfdChannel.enable_reading();
   m_poller->update_channel(&m_eventfdChannel);
 }
@@ -115,14 +100,7 @@ void TimerScheduler::start(){
   while(!m_quit){
     Poller::ChannelList activeChannels = m_poller->poll(kPollTimeMs);
     for(auto &channelPtr : activeChannels){
-      if(channelPtr->get_revents() & Poller::READ_EVENT){
-        if(channelPtr->get_fd() == m_timerfd){
-          handle_event();
-        }
-        else if(channelPtr->get_fd() == m_eventfd){
-          read_eventfd(m_eventfd);
-        }
-      }
+      channelPtr->handle_event();
     }
 
     handle_pending_functor();
@@ -133,7 +111,7 @@ void TimerScheduler::quit(){
   m_quit = true;
 
   if(!is_in_timerQueue_thread()){
-    write_eventfd(m_eventfd);
+    write_eventfd();
   }
 }
 
@@ -159,7 +137,7 @@ void TimerScheduler::cancel(TimerId timerId){
       m_pendingFunctors.push_back(std::bind(&TimerScheduler::cancel_timer, this, timerId));
     }
 
-    write_eventfd(m_eventfd);
+    write_eventfd();
   }
 }
 
@@ -175,7 +153,7 @@ TimerId TimerScheduler::add_timer(const TimerCallback &cb, Timestamp when, doubl
       m_pendingFunctors.push_back(std::bind(&TimerScheduler::insert, this, timer));
     }
 
-    write_eventfd(m_eventfd);
+    write_eventfd();
   }
 
   return TimerId(timer, timer->get_sequence());
@@ -289,5 +267,21 @@ void TimerScheduler::handle_pending_functor(){
 
   for(auto &functor : functors){
     functor();
+  }
+}
+
+void TimerScheduler::read_eventfd(){
+  uint64_t one;
+  ssize_t n = ::read(m_eventfd, &one, sizeof(one));
+  if(n != sizeof(one)){
+    LOG_SYSERR("read_eventfd error");
+  }
+}
+
+void TimerScheduler::write_eventfd(){
+  uint64_t one = 1;
+  ssize_t n = ::write(m_eventfd, &one, sizeof(one));
+  if(n != sizeof(one)){
+    LOG_SYSERR("write_eventfd error");
   }
 }

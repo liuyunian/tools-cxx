@@ -9,16 +9,10 @@
 #include <tools/timer/TimerScheduler.h>
 #include <tools/timer/TimerSchedulerThread.h>
 
-int cnt = 0;
-TimerScheduler *gScheduler;
+TimerScheduler *gScheduler = nullptr;
 
 void print(const char* msg){
   std::cout << "now: " << Timestamp::now().to_formatted_string() << " msg: " << msg << " tid = " << CurrentThread::get_tid() << std::endl;
-
-  ++ cnt;
-  if(cnt == 20){
-    gScheduler->quit();
-  }
 }
 
 void cancel(TimerId timer){
@@ -41,7 +35,6 @@ int main(){
   gScheduler->run_every(2, std::bind(print, "every2"));
   TimerId t3 = gScheduler->run_every(3, std::bind(print, "every3"));
   gScheduler->run_after(9.001, std::bind(cancel, t3));
-
 
   sleep(30);
 }

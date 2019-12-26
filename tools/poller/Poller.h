@@ -22,11 +22,6 @@ public:
 
   static Poller* new_default_Poller();
 
-  static const int READ_EVENT;
-  static const int WRITE_EVENT;
-  static const int ERROR_EVENT;
-  static const int CLOSE_EVENT;
-
 protected:
   ChannelList m_activeChannels;
   std::map<int, Channel*> m_channelStore;

@@ -13,17 +13,14 @@ TimerSchedulerThread::~TimerSchedulerThread(){
 
 TimerScheduler* TimerSchedulerThread::start(){
   m_thread.reset(new std::thread(std::bind(&TimerSchedulerThread::thread_func, this)));
-  TimerScheduler *s = nullptr;
   {
     std::unique_lock<std::mutex> ul(m_mutex);
     while(m_scheduler == nullptr){
       m_cond.wait(ul);
     }
-
-    s = m_scheduler;
   }
 
-  return s;
+  return m_scheduler;
 }
 
 void TimerSchedulerThread::thread_func(){
