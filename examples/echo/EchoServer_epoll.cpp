@@ -6,7 +6,7 @@
 
 #include <tools/log/log.h>
 #include <tools/base/Exception.h>
-#include <tools/socket/Socket.h>
+#include <tools/socket/ConnSocket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 #include <tools/socket/ServerSocket.h>
@@ -15,7 +15,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_nonblocking_socket(AF_INET));
+  ServerSocket ss(sockets::create_nonblocking_socket(sockets::IPv4));
   InetAddress addr(LISTEN_PORT);
   ss.set_reuse_address(true);
   ss.bind(addr);
@@ -29,7 +29,7 @@ int main(){
   event.data.fd = ss.get_sockfd();
   ::epoll_ctl(epfd, EPOLL_CTL_ADD, event.data.fd, &event);
 
-  std::map<int, Socket> connPool;
+  std::map<int, ConnSocket> connPool;
   int nready;
   char buf[BUFFER_SZ];
   ssize_t len = 0;
@@ -53,7 +53,7 @@ int main(){
 
       if(revent.data.fd == ss.get_sockfd()){                                        // 监听套接字的可读事件
         try{
-          Socket connSocket = ss.accept_nonblocking(nullptr);
+          ConnSocket connSocket = ss.accept_nonblocking();
           connPool.insert({connSocket.get_sockfd(), connSocket});
           
           event.data.fd = connSocket.get_sockfd();
@@ -76,7 +76,6 @@ int main(){
         }
         else{
           connSocketIter->second.write(buf, len);
-          memset(buf, 0, BUFFER_SZ);
         }
       }
     }

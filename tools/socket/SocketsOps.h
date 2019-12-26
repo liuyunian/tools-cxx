@@ -5,20 +5,24 @@
 
 namespace sockets {
 // core
+extern const int IPv4;
+extern const int IPv6;
+
 int create_socket(int family);
 int create_nonblocking_socket(int family);
 
 void close(int sockfd);
+
+ssize_t read(int sockfd, void *buf, ssize_t count);
+
+ssize_t write(int sockfd, const void *buf, ssize_t count);
 
 // server
 void bind(int sockfd, const struct sockaddr *addr);
 
 void listen(int sockfd);
 
-int accept(int sockfd);
 int accept(int sockfd, struct sockaddr_in6 *addr);
-
-int accept_nonblocking(int sockfd);
 int accept_nonblocking(int sockfd, struct sockaddr_in6 *addr);
 
 // client

@@ -1,11 +1,18 @@
-# ============================= build =============================================
-# static library
-set(SOCKET_SRC 
-    SocketsOps.cpp
-    InetAddress.cpp
-    Socket.cpp
-    ServerSocket.cpp)
+SET(SOCKET_SRC
+  ConnSocket.cpp
+  InetAddress.cpp
+  ServerSocket.cpp
+  SocketsOps.cpp
+)
 
+SET(SOCKET_HDS
+  ConnSocket.h
+  Endian.h
+  InetAddress.h
+  ServerSocket.h
+  SocketsOps.h
+)
+# ============================= build =============================================
 ADD_LIBRARY(tools_socket STATIC ${SOCKET_SRC})
 TARGET_LINK_LIBRARIES(tools_socket tools_log tools_base)
 
@@ -14,5 +21,4 @@ TARGET_LINK_LIBRARIES(tools_socket tools_log tools_base)
 INSTALL(TARGETS tools_socket ARCHIVE DESTINATION lib)
 
 # *.h -- install path = /usr/local/include/tools/socket
-FILE(GLOB HEADERS "*.h")
-INSTALL(FILES ${HEADERS} DESTINATION include/tools/socket)
+INSTALL(FILES ${SOCKET_HDS} DESTINATION include/tools/socket)

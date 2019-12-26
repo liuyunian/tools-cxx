@@ -1,7 +1,7 @@
 #ifndef SERVERSOCKET_H_
 #define SERVERSOCKET_H_
 
-class Socket;
+class ConnSocket;
 class InetAddress;
 
 #include "tools/base/noncopyable.h"
@@ -20,9 +20,9 @@ public:
 
   void listen();
 
-  Socket accept(InetAddress *peerAddr);
+  ConnSocket accept();
 
-  Socket accept_nonblocking(InetAddress *peerAddr);
+  ConnSocket accept_nonblocking();
 
   void set_reuse_address(bool on);
 

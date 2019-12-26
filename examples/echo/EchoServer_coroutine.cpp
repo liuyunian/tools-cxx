@@ -1,11 +1,10 @@
 #include <iostream>
 
 #include <string.h> // memset
-#include <netinet/in.h>
 
 #include <tools/log/log.h>
 #include <tools/base/Exception.h>
-#include <tools/socket/Socket.h>
+#include <tools/socket/ConnSocket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 #include <tools/socket/ServerSocket.h>
@@ -14,7 +13,7 @@
 #define LISTEN_PORT 9000
 #define BUFFER_SZ 1024
 
-void echo(Socket connSocket, CoScheduler *csd){
+void echo(ConnSocket connSocket, CoScheduler *csd){
   int len;
   char buf[BUFFER_SZ];
   for(;;){
@@ -33,12 +32,11 @@ void echo(Socket connSocket, CoScheduler *csd){
     }
 
     connSocket.write(buf, len);
-    memset(buf, 0, BUFFER_SZ);
   }
 }
 
 int main(){
-  ServerSocket ss(sockets::create_socket(AF_INET));
+  ServerSocket ss(sockets::create_socket(sockets::IPv4));
   InetAddress addr(LISTEN_PORT);
   ss.bind(addr);
   ss.listen();
@@ -49,7 +47,7 @@ int main(){
   
   for(;;){
     try{
-      Socket connSocket = ss.accept_nonblocking(nullptr);
+      ConnSocket connSocket = ss.accept_nonblocking();
       csd->create_coroutine(std::bind(echo, connSocket, std::placeholders::_1));
     }
     catch(const Exception &e){

@@ -1,8 +1,7 @@
-#include <string.h>     // strlen
-#include <netinet/in.h>
+#include <string.h>     // strlen memset
 
 #include <tools/base/Exception.h>
-#include <tools/socket/Socket.h>
+#include <tools/socket/ConnSocket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 #include <tools/socket/ServerSocket.h>
@@ -11,7 +10,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_socket(AF_INET));
+  ServerSocket ss(sockets::create_socket(sockets::IPv4));
 
   InetAddress addr(LISTEN_PORT);
   ss.bind(addr);
@@ -22,10 +21,11 @@ int main(){
   ssize_t len = 0;
   for(;;){
     try{
-      Socket connSocket = ss.accept_nonblocking(nullptr);
+      ConnSocket connSocket = ss.accept();
 
       while(connSocket.read(buf, BUFFER_SZ) > 0){
         connSocket.write(buf, strlen(buf));
+        ::memset(buf, 0, BUFFER_SZ);
       }
     }
     catch(const Exception &e){

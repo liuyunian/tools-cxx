@@ -5,7 +5,7 @@
 
 #include <tools/log/log.h>
 #include <tools/base/Exception.h>
-#include <tools/socket/Socket.h>
+#include <tools/socket/ConnSocket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 #include <tools/socket/ServerSocket.h>
@@ -14,7 +14,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_nonblocking_socket(AF_INET));
+  ServerSocket ss(sockets::create_nonblocking_socket(sockets::IPv4));
   InetAddress addr(LISTEN_PORT);
   ss.bind(addr);
   ss.listen();
@@ -26,7 +26,7 @@ int main(){
   FD_SET(maxfd, &allfds);
 
   int nready = 0;
-  std::vector<Socket> connPool;
+  std::vector<ConnSocket> connPool;
   char buf[BUFFER_SZ];
   ssize_t len = 0;
 
@@ -40,7 +40,7 @@ int main(){
 
     if(FD_ISSET(ss.get_sockfd(), &rfds)){
       try{
-        Socket connSocket = ss.accept_nonblocking(nullptr);
+        ConnSocket connSocket = ss.accept_nonblocking();
         maxfd = connSocket.get_sockfd();
         FD_SET(maxfd, &allfds);
         connPool.push_back(connSocket);
@@ -69,7 +69,6 @@ int main(){
         }
         else{
           iter->write(buf, len);
-          ::memset(buf, 0, BUFFER_SZ);
         }
 
         -- nready;

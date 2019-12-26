@@ -1,8 +1,7 @@
 #include <string.h>     // strlen
-#include <netinet/in.h> // AF_INET
 
 #include <tools/socket/Endian.h>
-#include <tools/socket/Socket.h>
+#include <tools/socket/ConnSocket.h>
 #include <tools/socket/SocketsOps.h>
 #include <tools/socket/InetAddress.h>
 
@@ -11,20 +10,22 @@
 #define BUFFER_SZ 1024
 
 int main(){
-    Socket socket(sockets::create_socket(AF_INET));
+  int clientfd = sockets::create_socket(sockets::IPv4);
 
-    InetAddress addr(IP, PORT);
-    sockets::connect(socket.get_sockfd(), addr.get_sockaddr());
+  InetAddress addr(IP, PORT);
+  sockets::connect(clientfd, addr.get_sockaddr());
 
-    char recvBuf[BUFFER_SZ] = {0};
-    char sendBuf[BUFFER_SZ] = {0};
-    while(fgets(sendBuf, BUFFER_SZ, stdin) != nullptr){
-        socket.write(sendBuf, strlen(sendBuf));
-        socket.read(recvBuf, sizeof(recvBuf));
+  char buf[BUFFER_SZ] = {0};
+  while(fgets(buf, BUFFER_SZ, stdin) != nullptr){
+    sockets::write(clientfd, buf, strlen(buf));
+    memset(buf, 0, BUFFER_SZ);
 
-        fputs(recvBuf, stdout);
-        memset(sendBuf, 0, BUFFER_SZ);
-    }
+    sockets::read(clientfd, buf, sizeof(buf));
+    fputs(buf, stdout);
+    memset(buf, 0, BUFFER_SZ);
+  }
 
-    return 0;
+  sockets::close(clientfd);
+
+  return 0;
 }
