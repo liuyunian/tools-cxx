@@ -5,11 +5,11 @@
 #include "tools/base/ProcessInfo.h"
 
 
-LogFile::LogFile(const std::string& basename, off_t rollSize, int checkEveryN, int flushInterval) : 
+LogFile::LogFile(const std::string& basename, off_t rollSize, int flushInterval, int checkEveryN) : 
   m_basename(basename),
   m_rollSize(rollSize),
-  m_checkEveryN(checkEveryN),
   m_flushInterval(flushInterval),
+  m_checkEveryN(checkEveryN),
   m_count(0),
   m_lastRoll(0),
   m_lastFlush(0),

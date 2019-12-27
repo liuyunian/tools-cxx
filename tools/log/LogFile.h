@@ -14,14 +14,22 @@ class LogFile : noncopyable {
 public:
   LogFile(const std::string &basename, 
           off_t rollSize,                 
-          int checkEveryN = 1024, // 计数器上限默认是1024
-          int flushInterval = 3); // 默认flush间隔是3s
+          int flushInterval = 3,    // 默认flush间隔是3s
+          int checkEveryN = 1024);  // 计数器上限默认是1024
 
   ~LogFile() = default;
 
   void append(const char *logLine, int len);
 
   void flush();
+
+  void setCheckEveryN(int n){
+    m_checkEveryN = n;
+  }
+
+  void setFlushInterval(int interval){
+    m_flushInterval = interval;
+  }
 
 private:
   void roll_file();
@@ -31,10 +39,10 @@ private:
   std::string get_file_name(Timestamp &now);            // 获取日志文件名，日志文件名：basename + 当前时间 + 主机名 + 进程id + .log
 
 private:
-  const std::string m_basename;   // 日志文件名开始的部分
-  const off_t m_rollSize;         // 日志文件多大时需要切换日志文件，单位字节
-  const int m_checkEveryN;        // 计数器上限，当计数器的值 == m_checkEveryN，判断是否需要将日志信息flush到日志文件中？日志文件是否需要更换？
-  const int m_flushInterval;      // 将日志信息flush到日志文件的时间间隔
+  const std::string m_basename; // 日志文件名开始的部分
+  const off_t m_rollSize;       // 日志文件多大时需要切换日志文件，单位字节
+  int m_flushInterval;          // 将日志信息flush到日志文件的时间间隔
+  int m_checkEveryN;            // 计数器上限，当计数器的值 == m_checkEveryN，判断是否需要将日志信息flush到日志文件中？日志文件是否需要更换？
 
   int m_count;                    // 计数器
 
