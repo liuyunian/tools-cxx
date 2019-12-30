@@ -50,5 +50,5 @@ ServerSocket类继承自Socket，是对服务器端监听Socket的封装
 * [echoClient_test.cpp](/examples/socket/echoClient_test.cpp)
 * [echoServer_test.cpp](/examples/socket/echoServer_test.cpp)
 * [echoServer_poll_test.cpp](/examples/socket/echoServer_poll_test.cpp)
-* [echoServer_epoll_test.cpp](/examples/socket/echoServer_epoll_test.cpp) -- 仅在Linux平台编译
+* [echoServer_epoll_test.cpp](/examples/socket/echoServer_epoll_test.cpp)
 
