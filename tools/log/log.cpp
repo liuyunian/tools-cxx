@@ -83,3 +83,19 @@ void Log::default_output(const char* msg, int len){
 void Log::default_flush(){
   fflush(stdout);
 }
+
+void Log::set_level(LogLevel level){
+  m_thresholdLevel = level;
+}
+
+void Log::set_level(const std::string &level){
+  if(level == "LOG_DEBUG"){
+    m_thresholdLevel = DEBUG;
+  }
+  else if(level == "LOG_WARN"){
+    m_thresholdLevel = WARN;
+  }
+  else{
+    // 默认的INFO级别
+  }
+}

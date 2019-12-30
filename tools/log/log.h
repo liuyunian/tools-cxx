@@ -29,9 +29,8 @@ public:
   static LogLevel get_threshold_level(){
     return m_thresholdLevel;
   }
-  static void set_level(LogLevel level){
-    m_thresholdLevel = level;
-  }
+  static void set_level(LogLevel level);
+  static void set_level(const std::string &level);
 
   typedef std::function<void(const char*, int)> OutputFunc;
   static void default_output(const char *msg, int len);
