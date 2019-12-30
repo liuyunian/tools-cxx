@@ -13,7 +13,9 @@
 #define LISTEN_PORT 9000
 #define BUFFER_SZ 1024
 
-void echo(ConnSocket connSocket, CoScheduler *csd){
+void echo(ConnSocket &s, CoScheduler *csd){
+  ConnSocket connSocket(std::move(s));
+  
   int len;
   char buf[BUFFER_SZ];
   for(;;){
@@ -48,7 +50,7 @@ int main(){
   for(;;){
     try{
       ConnSocket connSocket = ss.accept_nonblocking();
-      csd->create_coroutine(std::bind(echo, connSocket, std::placeholders::_1));
+      csd->create_coroutine(std::bind(echo, std::ref(connSocket), std::placeholders::_1));
     }
     catch(const Exception &e){
       LOG_WARN("accept error");

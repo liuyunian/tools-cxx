@@ -43,7 +43,7 @@ int main(){
         ConnSocket connSocket = ss.accept_nonblocking();
         maxfd = connSocket.get_sockfd();
         FD_SET(maxfd, &allfds);
-        connPool.push_back(connSocket);
+        connPool.push_back(std::move(connSocket));
       }
       catch(const Exception &e){
         LOG_WARN("accept error");

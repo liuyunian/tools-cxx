@@ -29,8 +29,8 @@ void on_message(Channel *channelPtr){
   else if(len == 0){
     LOG_INFO("client disconnects");
 
-    poller->remove_channel(connSocketIter->first);
-    delete connSocketIter->first;
+    channelPtr->remove();
+    delete channelPtr;
     connPool.erase(connSocketIter);
   }
   else{
@@ -41,11 +41,10 @@ void on_message(Channel *channelPtr){
 void on_connection(){
   try{
     ConnSocket connSocket = ss.accept_nonblocking();
-    Channel *connChannel = new Channel(connSocket.get_sockfd());
+    Channel *connChannel = new Channel(poller, connSocket.get_sockfd());
     connChannel->set_read_callback(std::bind(on_message, connChannel));
     connChannel->enable_reading();
-    poller->update_channel(connChannel);
-    connPool.insert({connChannel, connSocket});
+    connPool.insert({connChannel, std::move(connSocket)});
   }
   catch(const Exception &e){
     LOG_WARN("accept error");
@@ -59,10 +58,9 @@ int main(){
   ss.listen();
   LOG_INFO("server is listening...");
 
-  Channel listenChannel(ss.get_sockfd());
+  Channel listenChannel(poller, ss.get_sockfd());
   listenChannel.set_read_callback(on_connection);
   listenChannel.enable_reading();
-  poller->update_channel(&listenChannel);
 
   for(;;){
     Poller::ChannelList activeChannels = poller->poll(-1);

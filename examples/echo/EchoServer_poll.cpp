@@ -46,7 +46,7 @@ int main(){
         pd.fd = connSocket.get_sockfd();
         pd.events = POLLIN;                                         // 监听读事件 -- 连接套接字的读事件发生时，表示接收到数据
         pollfds.push_back(pd);
-        connPool.insert({pd.fd, connSocket});
+        connPool.insert({pd.fd, std::move(connSocket)});
       }
       catch(const Exception &e){
         LOG_WARN("accept error");

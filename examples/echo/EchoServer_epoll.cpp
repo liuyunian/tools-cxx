@@ -54,7 +54,7 @@ int main(){
       if(revent.data.fd == ss.get_sockfd()){                                        // 监听套接字的可读事件
         try{
           ConnSocket connSocket = ss.accept_nonblocking();
-          connPool.insert({connSocket.get_sockfd(), connSocket});
+          connPool.insert({connSocket.get_sockfd(), std::move(connSocket)});
           
           event.data.fd = connSocket.get_sockfd();
           event.events = EPOLLIN;                                                   // 关注连接套接字的读事件，LT工作模式
