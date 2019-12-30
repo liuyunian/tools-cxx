@@ -5,9 +5,11 @@
 
 #include "tools/base/noncopyable.h"
 
+class Poller;
+
 class Channel : noncopyable {
 public:
-  Channel(int fd);
+  Channel(Poller *poller, int fd);
   ~Channel() = default;
 
   int get_fd() const {
@@ -36,20 +38,24 @@ public:
 
   void enable_reading(){
     m_events |= kReadEvent;
+    update();
   }
 
   void disable_reading(){
     m_events &= ~kReadEvent;
+    update();
   }
 
   void enable_writing(){
     m_events |= kWriteEvent;
+    update();
   }
 
   void disable_writing(){
     m_events &= ~kWriteEvent;
+    update();
   }
-
+  
   typedef std::function<void()> EventCallback;
   void set_read_callback(const EventCallback &cb){
     m_readCallback = cb;
@@ -69,6 +75,11 @@ public:
 
   void handle_event();
 
+  void remove();
+
+private:
+  void update();
+
 private:
   // events
   static const int kReadEvent;
@@ -80,6 +91,7 @@ private:
   static const int ERROR_EVENT;
   static const int CLOSE_EVENT;
 
+  Poller *m_poller;   // 所属的m_poller
   const int m_fd;     // 负责的文件描述符
   int m_events;       // 关心的事件
   int m_revents;      // 发生的事件

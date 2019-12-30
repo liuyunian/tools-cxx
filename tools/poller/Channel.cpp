@@ -2,6 +2,7 @@
 #include <sys/epoll.h>  // POLLXXX
 
 #include "tools/log/log.h"
+#include "tools/poller/Poller.h"
 #include "tools/poller/Channel.h"
 
 // On Linux, the constants of poll(2) and epoll(4) are expected to be the same.
@@ -12,15 +13,16 @@ static_assert(EPOLLRDHUP == POLLRDHUP,  "epoll uses same flag values as poll");
 static_assert(EPOLLERR == POLLERR,      "epoll uses same flag values as poll");
 static_assert(EPOLLHUP == POLLHUP,      "epoll uses same flag values as poll");
 
+const int Channel::kReadEvent = POLLIN | POLLPRI;
+const int Channel::kWriteEvent = POLLOUT;
+
 const int Channel::READ_EVENT = POLLIN | POLLPRI | POLLRDHUP;
 const int Channel::WRITE_EVENT = POLLOUT;
 const int Channel::ERROR_EVENT = POLLERR;
 const int Channel::CLOSE_EVENT = POLLHUP | (!POLLIN);
 
-const int Channel::kReadEvent = POLLIN | POLLPRI;
-const int Channel::kWriteEvent = POLLOUT;
-
-Channel::Channel(int fd) : 
+Channel::Channel(Poller *poller, int fd) : 
+  m_poller(poller),
   m_fd(fd),
   m_events(0),
   m_revents(0),
@@ -57,4 +59,12 @@ void Channel::handle_event(){
 
     if(m_closeCallback) m_closeCallback();
   }
+}
+
+void Channel::remove(){
+  m_poller->remove_channel(this);
+}
+
+void Channel::update(){
+  m_poller->update_channel(this);
 }

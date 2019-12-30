@@ -69,21 +69,19 @@ TimerScheduler::TimerScheduler() :
   m_quit(false),
   m_poller(Poller::new_default_Poller()),
   m_timerfd(create_timerfd()),
-  m_timerfdChannel(m_timerfd),
+  m_timerfdChannel(m_poller.get(), m_timerfd),
   m_callingExpiredTimer(false),
   m_eventfd(create_eventfd()),
-  m_eventfdChannel(m_eventfd)
+  m_eventfdChannel(m_poller.get(), m_eventfd)
 {
   assert(tTimerScheduler == nullptr);               // 确保一个线程中只有一个TimerScheduler对象
   tTimerScheduler = this;
 
   m_timerfdChannel.set_read_callback(std::bind(&TimerScheduler::handle_event, this));
   m_timerfdChannel.enable_reading();
-  m_poller->update_channel(&m_timerfdChannel);
 
   m_eventfdChannel.set_read_callback(std::bind(&TimerScheduler::read_eventfd, this));
   m_eventfdChannel.enable_reading();
-  m_poller->update_channel(&m_eventfdChannel);
 }
 
 TimerScheduler::~TimerScheduler(){
