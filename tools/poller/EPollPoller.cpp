@@ -28,6 +28,7 @@ EPollPoller::~EPollPoller(){
 }
 
 Poller::ChannelList& EPollPoller::poll(int timeoutMs){
+  m_activeChannels.clear();
   int numEvents = ::epoll_wait(m_epfd, m_eventList.data(), m_eventList.size(), timeoutMs);
   if(numEvents < 0){
     if(errno != EINTR){                            // EINTR错误不用报错
@@ -53,7 +54,6 @@ void EPollPoller::fill_active_channels(int numEvents){
 
   Channel *channel;
   std::map<int, Channel*>::const_iterator iter;
-  m_activeChannels.clear();
   for(int i = 0; i < numEvents; ++ i){
       channel = static_cast<Channel*>(m_eventList[i].data.ptr);
       iter = m_channelStore.find(channel->get_fd());
