@@ -5,6 +5,7 @@
 #include <stdio.h>        // snprintf
 #include <assert.h>       // assert
 #include <sys/socket.h>   // setsockopt
+#include <sys/uio.h>      // readv
 #include <netinet/tcp.h>  // TCP_NODELAY
 #include <netinet/in.h>   // AF_INET
 
@@ -44,6 +45,10 @@ void close(int sockfd){
 
 ssize_t read(int sockfd, void *buf, ssize_t count){
   return ::read(sockfd, buf, count);
+}
+
+ssize_t readv(int sockfd, const struct iovec *iov, int iovcnt){
+  return ::readv(sockfd, iov, iovcnt);
 }
 
 ssize_t write(int sockfd, const void *buf, ssize_t count){
