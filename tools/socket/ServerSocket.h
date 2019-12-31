@@ -1,6 +1,8 @@
 #ifndef SERVERSOCKET_H_
 #define SERVERSOCKET_H_
 
+#include <arpa/inet.h>
+
 class ConnSocket;
 class InetAddress;
 
@@ -8,7 +10,9 @@ class InetAddress;
 
 class ServerSocket : noncopyable{
 public:
-  ServerSocket(int sockfd);
+  ServerSocket(int port, sa_family_t family = AF_INET, bool isBlocking = true);
+
+  ServerSocket(const InetAddress &localAddr, bool isBlocking = true);
 
   ~ServerSocket();
 
@@ -16,7 +20,7 @@ public:
     return m_sockfd;
   }
 
-  void bind(const InetAddress &localAddr);
+  // void bind(const InetAddress &localAddr);
 
   void listen();
 

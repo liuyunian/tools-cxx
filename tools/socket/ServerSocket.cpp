@@ -6,17 +6,28 @@
 #include "tools/socket/SocketsOps.h"
 #include "tools/socket/InetAddress.h"
 
-ServerSocket::ServerSocket(int sockfd) : 
-  m_sockfd(sockfd)
-{}
+ServerSocket::ServerSocket(int port, sa_family_t family, bool isBlocking) : 
+  m_sockfd(isBlocking ? sockets::create_socket(family)
+                      : sockets::create_nonblocking_socket(family))
+{
+  InetAddress localAddr(port, family);
+  sockets::bind(m_sockfd, localAddr.get_sockaddr());
+}
+
+ServerSocket::ServerSocket(const InetAddress &localAddr, bool isBlocking) : 
+  m_sockfd(isBlocking ? sockets::create_socket(localAddr.get_family())
+                      : sockets::create_nonblocking_socket(localAddr.get_family()))
+{
+  sockets::bind(m_sockfd, localAddr.get_sockaddr());
+}
 
 ServerSocket::~ServerSocket(){
   sockets::close(m_sockfd);
 }
 
-void ServerSocket::bind(const InetAddress &localAddr){
-  sockets::bind(m_sockfd, localAddr.get_sockaddr());
-}
+// void ServerSocket::bind(const InetAddress &localAddr){
+//   sockets::bind(m_sockfd, localAddr.get_sockaddr());
+// }
 
 void ServerSocket::listen(){
   sockets::listen(m_sockfd);

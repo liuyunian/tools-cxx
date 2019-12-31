@@ -14,10 +14,10 @@
 
 namespace sockets {
 
-const int IPv4 = AF_INET;
-const int IPv6 = AF_INET6;
+const sa_family_t IPv4 = AF_INET;
+const sa_family_t IPv6 = AF_INET6;
 
-int create_socket(int family){
+int create_socket(sa_family_t family){
   int sockfd = ::socket(family, SOCK_STREAM, IPPROTO_TCP);
   if(sockfd < 0){
     LOG_SYSFATAL("Failed to create socket in sockets::create_socket(int)");
@@ -26,7 +26,7 @@ int create_socket(int family){
   return sockfd;
 }
 
-int create_nonblocking_socket(int family){
+int create_nonblocking_socket(sa_family_t family){
   int sockfd = ::socket(family, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
   if(sockfd < 0){
     LOG_SYSFATAL("Failed to create socket in sockets::create_nonblocking_socket(int)");

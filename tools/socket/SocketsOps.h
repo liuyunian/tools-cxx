@@ -5,11 +5,11 @@
 
 namespace sockets {
 // core
-extern const int IPv4;
-extern const int IPv6;
+extern const sa_family_t IPv4;
+extern const sa_family_t IPv6;
 
-int create_socket(int family);
-int create_nonblocking_socket(int family);
+int create_socket(sa_family_t family = IPv4);
+int create_nonblocking_socket(sa_family_t family = IPv4);
 
 void close(int sockfd);
 

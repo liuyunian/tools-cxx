@@ -10,54 +10,57 @@
 
 class InetAddress : public copyable {
 public:
-    explicit InetAddress(uint16_t port = 0, bool loopbackOnly = false, bool ipv6 = false);
+  static const sa_family_t IPv4 = AF_INET;
+  static const sa_family_t IPv6 = AF_INET6;
 
-    InetAddress(const std::string& ip, uint16_t port, bool ipv6 = false);
+  explicit InetAddress(uint16_t port = 0, sa_family_t family = IPv4, bool loopbackOnly = false);
 
-    explicit InetAddress(const struct sockaddr_in& addr) : 
-        m_addr(addr){}
+  InetAddress(const std::string &ip, uint16_t port, sa_family_t family = IPv4);
 
-    explicit InetAddress(const struct sockaddr_in6& addr) : 
-        m_addr6(addr){}
+  explicit InetAddress(const struct sockaddr_in &addr) : 
+    m_addr(addr){}
 
-    const struct sockaddr* get_sockaddr() const {
-        return reinterpret_cast<const struct sockaddr*>(&m_addr6);
-    }
+  explicit InetAddress(const struct sockaddr_in6 &addr) : 
+    m_addr6(addr){}
 
-    void set_sockaddr_in6(const struct sockaddr_in6& addr6){
-        m_addr6 = addr6;
-    }
+  const struct sockaddr* get_sockaddr() const {
+    return reinterpret_cast<const struct sockaddr*>(&m_addr6);
+  }
 
-    sa_family_t get_family() const { 
-        return m_addr.sin_family;
-    }
+  void set_sockaddr_in6(const struct sockaddr_in6 &addr6){
+    m_addr6 = addr6;
+  }
 
-    /*
-     * @brief 获取网络序ip -- 限制于ipv4
-     */
-    uint32_t get_netendian_ip() const {
-        assert(get_family() == AF_INET);
-        return m_addr.sin_addr.s_addr;
-    }
+  sa_family_t get_family() const { 
+    return m_addr.sin_family;
+  }
 
-    /*
-     * @brief 获取网络序port
-     */
-    uint16_t get_netendian_port() const {
-        return m_addr.sin_port;
-    }
+  /*
+    * @brief 获取网络序ip -- 限制于ipv4
+    */
+  uint32_t get_netendian_ip() const {
+    assert(get_family() == AF_INET);
+    return m_addr.sin_addr.s_addr;
+  }
 
-    std::string to_ip() const;
+  /*
+    * @brief 获取网络序port
+    */
+  uint16_t get_netendian_port() const {
+    return m_addr.sin_port;
+  }
 
-    std::string to_ip_and_port() const;
+  std::string to_ip() const;
 
-    uint16_t to_port() const;
+  std::string to_ip_and_port() const;
+
+  uint16_t to_port() const;
 
 private:
-    union{
-        struct sockaddr_in m_addr;      // IPv4地址
-        struct sockaddr_in6 m_addr6;    // IPv6地址
-    };
+  union{
+    struct sockaddr_in m_addr;      // IPv4地址
+    struct sockaddr_in6 m_addr6;    // IPv6地址
+  };
 };
 
 #endif // INETADDRESS_H_
