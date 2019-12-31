@@ -6,13 +6,11 @@
 #include <tools/socket/InetAddress.h>
 
 #define PORT 9000
-#define IP "127.0.0.1"
 #define BUFFER_SZ 1024
 
 int main(){
-  int clientfd = sockets::create_socket(sockets::IPv4);
-
-  InetAddress addr(IP, PORT);
+  int clientfd = sockets::create_socket();
+  InetAddress addr(PORT, InetAddress::IPv4, true);
   sockets::connect(clientfd, addr.get_sockaddr());
 
   char buf[BUFFER_SZ] = {0};

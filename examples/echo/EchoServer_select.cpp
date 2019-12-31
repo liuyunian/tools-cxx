@@ -14,9 +14,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_nonblocking_socket(sockets::IPv4));
-  InetAddress addr(LISTEN_PORT);
-  ss.bind(addr);
+  ServerSocket ss(LISTEN_PORT);
   ss.listen();
   LOG_INFO("server is listening...");
 
@@ -43,7 +41,7 @@ int main(){
         ConnSocket connSocket = ss.accept_nonblocking();
         maxfd = connSocket.get_sockfd();
         FD_SET(maxfd, &allfds);
-        connPool.push_back(std::move(connSocket));
+        connPool.push_back(connSocket);
       }
       catch(const Exception &e){
         LOG_WARN("accept error");

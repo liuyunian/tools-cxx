@@ -15,10 +15,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_nonblocking_socket(sockets::IPv4));
-  InetAddress addr(LISTEN_PORT);
-  ss.set_reuse_address(true);
-  ss.bind(addr);
+  ServerSocket ss(LISTEN_PORT);
   ss.listen();
   LOG_INFO("server is listening...");
 
@@ -54,11 +51,11 @@ int main(){
       if(revent.data.fd == ss.get_sockfd()){                                        // 监听套接字的可读事件
         try{
           ConnSocket connSocket = ss.accept_nonblocking();
-          connPool.insert({connSocket.get_sockfd(), std::move(connSocket)});
-          
-          event.data.fd = connSocket.get_sockfd();
+          int connfd = connSocket.get_sockfd();
+          connPool.insert({connfd, connSocket});          
+          event.data.fd = connfd;
           event.events = EPOLLIN;                                                   // 关注连接套接字的读事件，LT工作模式
-          epoll_ctl(epfd, EPOLL_CTL_ADD, event.data.fd, &event);
+          epoll_ctl(epfd, EPOLL_CTL_ADD, connfd, &event);
         }
         catch(const Exception &e){
           LOG_WARN("accept error");

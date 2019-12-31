@@ -10,11 +10,7 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(sockets::create_socket(sockets::IPv4));
-
-  InetAddress addr(LISTEN_PORT);
-  ss.bind(addr);
-
+  ServerSocket ss(LISTEN_PORT);
   ss.listen();
 
   char buf[BUFFER_SZ];

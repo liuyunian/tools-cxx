@@ -15,7 +15,7 @@
 #define LISTEN_PORT 9000
 #define BUFFER_SZ 1024
 
-ServerSocket ss(sockets::create_nonblocking_socket(sockets::IPv4));
+ServerSocket ss(LISTEN_PORT);
 Poller *poller = Poller::new_default_Poller();
 std::map<Channel*, ConnSocket> connPool;
 
@@ -44,7 +44,7 @@ void on_connection(){
     Channel *connChannel = new Channel(poller, connSocket.get_sockfd());
     connChannel->set_read_callback(std::bind(on_message, connChannel));
     connChannel->enable_reading();
-    connPool.insert({connChannel, std::move(connSocket)});
+    connPool.insert({connChannel, connSocket});
   }
   catch(const Exception &e){
     LOG_WARN("accept error");
@@ -52,9 +52,6 @@ void on_connection(){
 }
 
 int main(){
-  InetAddress addr(LISTEN_PORT);
-  ss.set_reuse_address(true);
-  ss.bind(addr);
   ss.listen();
   LOG_INFO("server is listening...");
 

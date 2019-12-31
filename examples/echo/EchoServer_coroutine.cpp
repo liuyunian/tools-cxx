@@ -13,9 +13,7 @@
 #define LISTEN_PORT 9000
 #define BUFFER_SZ 1024
 
-void echo(ConnSocket &s, CoScheduler *csd){
-  ConnSocket connSocket(std::move(s));
-  
+void echo(ConnSocket connSocket, CoScheduler *csd){
   int len;
   char buf[BUFFER_SZ];
   for(;;){
@@ -25,7 +23,7 @@ void echo(ConnSocket &s, CoScheduler *csd){
         csd->yield();
       }
       else{
-        LOG_WARN("read error");
+        LOG_WARN("read error: %s", ::strerror(errno));
       }
     }
     else if(len == 0){
@@ -38,9 +36,7 @@ void echo(ConnSocket &s, CoScheduler *csd){
 }
 
 int main(){
-  ServerSocket ss(sockets::create_socket(sockets::IPv4));
-  InetAddress addr(LISTEN_PORT);
-  ss.bind(addr);
+  ServerSocket ss(LISTEN_PORT);
   ss.listen();
   LOG_INFO("server is listening...");
 
@@ -50,7 +46,7 @@ int main(){
   for(;;){
     try{
       ConnSocket connSocket = ss.accept_nonblocking();
-      csd->create_coroutine(std::bind(echo, std::ref(connSocket), std::placeholders::_1));
+      csd->create_coroutine(std::bind(echo, connSocket, std::placeholders::_1));
     }
     catch(const Exception &e){
       LOG_WARN("accept error");
