@@ -15,6 +15,7 @@
 
 int main(){
   ServerSocket ss(LISTEN_PORT);
+  ss.set_reuse_address(true);
   ss.listen();
   LOG_INFO("server is listening...");
 

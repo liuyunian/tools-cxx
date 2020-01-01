@@ -10,7 +10,8 @@
 #define BUFFER_SZ 1024
 
 int main(){
-  ServerSocket ss(LISTEN_PORT);
+  ServerSocket ss(LISTEN_PORT, true);
+  ss.set_reuse_address(true);
   ss.listen();
 
   char buf[BUFFER_SZ];

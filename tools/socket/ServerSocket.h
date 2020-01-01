@@ -3,24 +3,23 @@
 
 #include <arpa/inet.h>
 
+#include "tools/socket/InetAddress.h"
+
 class ConnSocket;
-class InetAddress;
 
 #include "tools/base/noncopyable.h"
 
 class ServerSocket : noncopyable{
 public:
-  ServerSocket(int port, sa_family_t family = AF_INET, bool isBlocking = true);
+  ServerSocket(int port, bool isBlocking = false, sa_family_t family = AF_INET);
 
-  ServerSocket(const InetAddress &localAddr, bool isBlocking = true);
+  ServerSocket(const InetAddress &localAddr, bool isBlocking = false);
 
   ~ServerSocket();
 
   inline int get_sockfd() const {
     return m_sockfd;
   }
-
-  // void bind(const InetAddress &localAddr);
 
   void listen();
 
@@ -32,11 +31,8 @@ public:
 
   void set_reuse_port(bool on);
 
-  void set_keep_alive(bool on);
-
-  void set_no_delay(bool on);
-
 private:
+  InetAddress m_localAddr;
   const int m_sockfd;
 };
 

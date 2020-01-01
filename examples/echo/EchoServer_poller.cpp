@@ -52,6 +52,7 @@ void on_connection(){
 }
 
 int main(){
+  ss.set_reuse_address(true);
   ss.listen();
   LOG_INFO("server is listening...");
 

@@ -51,6 +51,18 @@ ssize_t ConnSocket::read(void *buf, ssize_t count){
   return sockets::read(m_guard->m_sockfd, buf, count);
 }
 
+ssize_t ConnSocket::readv(const struct iovec *iov, int iovcnt){
+  return sockets::readv(m_guard->m_sockfd, iov, iovcnt);
+}
+
 ssize_t ConnSocket::write(const void *buf, ssize_t count){
   return sockets::write(m_guard->m_sockfd, buf, count);
+}
+
+void ConnSocket::set_keep_alive(bool on){
+  sockets::set_keep_alive(m_guard->m_sockfd, on);
+}
+
+void ConnSocket::set_no_delay(bool on){
+  sockets::set_keep_alive(m_guard->m_sockfd, on);
 }

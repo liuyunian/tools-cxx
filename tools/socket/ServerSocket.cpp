@@ -6,30 +6,24 @@
 #include "tools/socket/SocketsOps.h"
 #include "tools/socket/InetAddress.h"
 
-ServerSocket::ServerSocket(int port, sa_family_t family, bool isBlocking) : 
+ServerSocket::ServerSocket(int port, bool isBlocking, sa_family_t family) : 
   m_sockfd(isBlocking ? sockets::create_socket(family)
-                      : sockets::create_nonblocking_socket(family))
-{
-  InetAddress localAddr(port, family);
-  sockets::bind(m_sockfd, localAddr.get_sockaddr());
-}
+                      : sockets::create_nonblocking_socket(family)),
+  m_localAddr(port, family)
+{}
 
 ServerSocket::ServerSocket(const InetAddress &localAddr, bool isBlocking) : 
   m_sockfd(isBlocking ? sockets::create_socket(localAddr.get_family())
-                      : sockets::create_nonblocking_socket(localAddr.get_family()))
-{
-  sockets::bind(m_sockfd, localAddr.get_sockaddr());
-}
+                      : sockets::create_nonblocking_socket(localAddr.get_family())),
+  m_localAddr(localAddr)
+{}
 
 ServerSocket::~ServerSocket(){
   sockets::close(m_sockfd);
 }
 
-// void ServerSocket::bind(const InetAddress &localAddr){
-//   sockets::bind(m_sockfd, localAddr.get_sockaddr());
-// }
-
 void ServerSocket::listen(){
+  sockets::bind(m_sockfd, m_localAddr.get_sockaddr());
   sockets::listen(m_sockfd);
 }
 
@@ -63,12 +57,4 @@ void ServerSocket::set_reuse_address(bool on){
 
 void ServerSocket::set_reuse_port(bool on){
   sockets::set_reuse_port(m_sockfd, on);
-}
-
-void ServerSocket::set_keep_alive(bool on){
-  sockets::set_keep_alive(m_sockfd, on);
-}
-
-void ServerSocket::set_no_delay(bool on){
-  sockets::set_keep_alive(m_sockfd, on);
 }

@@ -41,7 +41,13 @@ public:
 
   ssize_t read(void *buf, ssize_t count);
 
+  ssize_t readv(const struct iovec *iov, int iovcnt);
+
   ssize_t write(const void *buf, ssize_t count);
+
+  void set_keep_alive(bool on);
+
+  void set_no_delay(bool on);
 
 private:
   SocketGuard *m_guard;
