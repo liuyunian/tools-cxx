@@ -55,6 +55,10 @@ public:
     m_events &= ~kWriteEvent;
     update();
   }
+
+  bool is_writing() const {
+    return m_events & kWriteEvent;
+  }
   
   typedef std::function<void()> EventCallback;
   void set_read_callback(const EventCallback &cb){
