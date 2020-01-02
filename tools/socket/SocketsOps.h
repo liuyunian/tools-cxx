@@ -13,6 +13,8 @@ int create_nonblocking_socket(sa_family_t family = IPv4);
 
 void close(int sockfd);
 
+void shutdown_write(int sockfd);
+
 ssize_t read(int sockfd, void *buf, ssize_t count);
 ssize_t readv(int sockfd, const struct iovec *iov, int iovcnt);
 

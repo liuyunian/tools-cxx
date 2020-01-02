@@ -43,6 +43,13 @@ void close(int sockfd){
   }
 }
 
+void shutdown_write(int sockfd){
+  int ret = ::shutdown(sockfd, SHUT_WR);
+  if(ret < 0){
+    LOG_SYSFATAL("Failed to shutdown write in sockets::shutdown_write(int)");
+  }
+}
+
 ssize_t read(int sockfd, void *buf, ssize_t count){
   return ::read(sockfd, buf, count);
 }

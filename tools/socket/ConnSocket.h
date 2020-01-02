@@ -45,6 +45,8 @@ public:
 
   ssize_t write(const void *buf, ssize_t count);
 
+  void shutdown_write();
+
   void set_keep_alive(bool on);
 
   void set_no_delay(bool on);

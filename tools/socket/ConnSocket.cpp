@@ -59,6 +59,10 @@ ssize_t ConnSocket::write(const void *buf, ssize_t count){
   return sockets::write(m_guard->m_sockfd, buf, count);
 }
 
+void ConnSocket::shutdown_write(){
+  sockets::shutdown_write(m_guard->m_sockfd);
+}
+
 void ConnSocket::set_keep_alive(bool on){
   sockets::set_keep_alive(m_guard->m_sockfd, on);
 }
