@@ -13,9 +13,9 @@ class Timestamp;
 class LogFile : noncopyable {
 public:
   LogFile(const std::string &basename, 
-          off_t rollSize,                 
-          int flushInterval = 3,    // 默认flush间隔是3s
-          int checkEveryN = 1024);  // 计数器上限默认是1024
+          off_t rollSize = 64*1024*1024,  // 默认日志文件大小64MB
+          int flushInterval = 3,          // 默认flush间隔是3s
+          int checkEveryN = 1024);        // 计数器上限默认是1024
 
   ~LogFile() = default;
 

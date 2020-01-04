@@ -33,17 +33,27 @@ void LogFile::append_unlocked(const char *logLine, int len){
   }
   else{
     ++ m_count;
+    Timestamp now = Timestamp::now();
     if(m_count >= m_checkEveryN){
       m_count = 0;
 
-      Timestamp now = Timestamp::now();
       if(now.get_period() != m_startPeriod){
         roll_file();
       }
-      else if(now.get_seconds_since_epoch() - m_lastFlush > m_flushInterval){
-        m_lastFlush = now.get_seconds_since_epoch();
-        m_fout->flush();
+
+      m_lastFlush = now.get_seconds_since_epoch();
+      m_fout->flush();
+
+      return;
+    }
+    
+    if(now.get_seconds_since_epoch() - m_lastFlush > m_flushInterval){
+      if(now.get_period() != m_startPeriod){
+        roll_file();
       }
+
+      m_lastFlush = now.get_seconds_since_epoch();
+      m_fout->flush();
     }
   }
 }
