@@ -16,7 +16,7 @@
 #define BUFFER_SZ 1024
 
 ServerSocket ss(LISTEN_PORT);
-Poller *poller = Poller::new_default_Poller();
+Poller *poller = Poller::create_poller();
 std::map<Channel*, ConnSocket> connPool;
 
 void on_message(Channel *channelPtr){

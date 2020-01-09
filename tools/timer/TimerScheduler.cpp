@@ -67,7 +67,7 @@ static void read_timerfd(int timerfd){
 TimerScheduler::TimerScheduler() : 
   m_tid(CurrentThread::get_tid()),
   m_quit(false),
-  m_poller(Poller::new_default_Poller()),
+  m_poller(Poller::create_poller()),
   m_timerfd(create_timerfd()),
   m_timerfdChannel(m_poller.get(), m_timerfd),
   m_callingExpiredTimer(false),

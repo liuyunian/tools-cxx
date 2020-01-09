@@ -20,7 +20,7 @@ public:
 
   virtual void remove_channel(Channel *channel) = 0;
 
-  static Poller* new_default_Poller();
+  static Poller* create_poller();
 
 protected:
   ChannelList m_activeChannels;
