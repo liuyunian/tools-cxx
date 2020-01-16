@@ -8,31 +8,33 @@
 #include <assert.h>
 
 #include "tools/base/noncopyable.h"
+#include "tools/base/Exception.h"
 
 class ConfigFile : noncopyable {
 public:
-    ConfigFile() = default;
+  ConfigFile() = default;
 
-    ~ConfigFile() = default;
+  ~ConfigFile() = default;
 
-    bool load(const char* path);
+  void load(const char* path);
 
-    template<typename T>
-    const T get(const std::string& itemName){
-        auto iter = m_configItemStore.find(itemName);
-        assert(iter != m_configItemStore.end());
-
-        T retVal;
-        std::stringstream(iter->second) >> retVal;
-
-        return retVal;
+  template<typename T>
+  const T get(const std::string& itemName){
+    auto iter = m_configItemStore.find(itemName);
+    if(iter == m_configItemStore.end()){
+      throw Exception("can't find in ConfigFile::get");
     }
 
-private:
-    void trim_space(std::string& string);
+    T retVal;
+    std::stringstream(iter->second) >> retVal;
+    return retVal;
+  }
 
 private:
-    std::map<std::string, std::string> m_configItemStore;
+  void trim_space(std::string& string);
+
+private:
+  std::map<std::string, std::string> m_configItemStore;
 };
 
 #endif // CONFIGFILE_H_
