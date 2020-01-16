@@ -26,7 +26,13 @@ public:
     }
 
     T retVal;
-    std::stringstream(iter->second) >> retVal;
+    if(std::is_same<T, bool>::value){
+      std::stringstream(iter->second) >> std::boolalpha >> retVal;
+    }
+    else{
+      std::stringstream(iter->second) >> retVal;
+    }
+    
     return retVal;
   }
 

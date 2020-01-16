@@ -29,7 +29,7 @@ int main(){
   std::cout << double_val << '\n';
 
   bool bool_val = cf.get<bool>("BoolTest");
-  std::cout << std::boolalpha << bool_val << std::endl;
+  std::cout << std::boolalpha << bool_val << std::endl; 
 
   return 0;
 }
