@@ -1,5 +1,5 @@
 ADD_EXECUTABLE(Endian_test Endian_test.cpp)
-TARGET_LINK_LIBRARIES(Endian_test tools_socket tools_log tools_base)
+TARGET_LINK_LIBRARIES(Endian_test tools_cxx)
 
 ADD_EXECUTABLE(InetAddress_test InetAddress_test.cpp)
-TARGET_LINK_LIBRARIES(InetAddress_test tools_socket tools_log tools_base)
+TARGET_LINK_LIBRARIES(InetAddress_test tools_cxx)

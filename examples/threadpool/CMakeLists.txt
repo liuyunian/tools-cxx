@@ -1,2 +1,2 @@
 ADD_EXECUTABLE(threadpool_test threadpool_test.cpp)
-TARGET_LINK_LIBRARIES(threadpool_test tools_threadpool tools_log tools_base pthread)
+TARGET_LINK_LIBRARIES(threadpool_test tools_cxx pthread)

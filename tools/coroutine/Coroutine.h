@@ -5,6 +5,8 @@
 #include <memory>
 #include <functional>
 
+#include <ucontext.h>
+
 #include "tools/base/noncopyable.h"
 
 class CoScheduler;

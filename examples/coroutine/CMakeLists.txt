@@ -1,5 +1,5 @@
 ADD_EXECUTABLE(CoScheduler_test CoScheduler_test.cpp)
-TARGET_LINK_LIBRARIES(CoScheduler_test tools_co tools_base)
+TARGET_LINK_LIBRARIES(CoScheduler_test tools_cxx)
 
 ADD_EXECUTABLE(CoSchedulerThread_test CoSchedulerThread_test.cpp)
-TARGET_LINK_LIBRARIES(CoSchedulerThread_test tools_co tools_base pthread)
+TARGET_LINK_LIBRARIES(CoSchedulerThread_test tools_cxx pthread)

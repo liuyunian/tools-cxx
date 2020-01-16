@@ -8,16 +8,14 @@
 #include <memory>
 #include <functional>
 
-#include <ucontext.h>
-
 #include "tools/base/noncopyable.h"
-#include "tools/coroutine/Coroutine.h"
 #include "tools/base/CurrentThread.h"
+#include "tools/coroutine/Coroutine.h"
 
 class CoScheduler : noncopyable{
 public:
   CoScheduler(size_t stackSize = 128*1024);
-  ~CoScheduler() = default;
+  ~CoScheduler(){}
 
   void start();
 
